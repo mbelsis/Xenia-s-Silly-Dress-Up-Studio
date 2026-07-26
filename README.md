@@ -14,8 +14,13 @@ will point out that he already breathes water.
 No build step, no dependencies, no accounts. Serve the folder and open it:
 
 ```bash
-python3 -m http.server 8321      # then open http://localhost:8321
+cd /Users/meletis.belsis/Documents/GitHub/game
+python3 -m http.server 8321
 ```
+
+Then open **http://localhost:8321** in your browser. Stop the server with
+`Ctrl+C`. (Don't just double-click `index.html` — over `file://` the browser
+blocks the offline support and the photo export.)
 
 To put it on a phone or tablet, see [INSTALL.md](INSTALL.md) — it installs to
 the Home Screen like a normal app and works offline.
