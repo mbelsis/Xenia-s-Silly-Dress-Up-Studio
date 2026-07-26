@@ -1758,5 +1758,170 @@ const ITEMS = [
       <circle cx="0" cy="-20" r="22" fill="#ff6fb5"/>
       <path d="M0 -20 q12 -2 9 9 q-3 11 -14 8 q-11 -3 -8 -15 q3 -12 16 -9" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
     `
+  },
+
+  /* ---------------- SEASONAL ----------------
+     These live in their own drawer that only appears at the right time of
+     year. `slot` says where they actually go on the character. */
+
+  /* 🌞 summer */
+  {
+    id: "beachball", category: "seasonal", season: "summer", slot: "held", name: "Beach Ball",
+    svg: `
+      <circle r="30" fill="#fff"/>
+      <path d="M0 -30 A30 30 0 0 1 26 15 L0 0 Z" fill="#e53935"/>
+      <path d="M26 15 A30 30 0 0 1 -26 15 L0 0 Z" fill="#ffe921"/>
+      <path d="M-26 15 A30 30 0 0 1 0 -30 L0 0 Z" fill="#3aa0ff"/>
+      <circle r="30" fill="none" stroke="#e0e0e0" stroke-width="2"/>
+    `
+  },
+  {
+    id: "floatring", category: "seasonal", season: "summer", slot: "clothes", name: "Floaty Ring",
+    svg: `
+      <circle cy="10" r="54" fill="#ff7043"/>
+      <path d="M0 -44 a44 44 0 0 1 38 22 l-14 8 a28 28 0 0 0 -24 -14 Z" fill="#fff"/>
+      <path d="M-38 32 a44 44 0 0 1 -6 -22 h16 a28 28 0 0 0 4 14 Z" fill="#fff"/>
+      <circle cy="10" r="26" fill="#b3e5fc" opacity="0.5"/>
+    `
+  },
+  {
+    id: "icelolly", category: "seasonal", season: "summer", slot: "held", name: "Ice Lolly",
+    svg: `
+      <rect x="-4" y="10" width="8" height="34" rx="3" fill="#d7a86e"/>
+      <path d="M-16 -34 h32 q4 0 4 6 v34 q0 6 -6 6 h-28 q-6 0 -6 -6 v-34 q0 -6 4 -6 Z" fill="#ff6fb5"/>
+      <path d="M-16 -12 h36 v10 h-36 Z" fill="#ffe921"/>
+      <path d="M-16 4 h36 v8 h-36 Z" fill="#4dd0e1"/>
+    `
+  },
+  {
+    id: "suncream", category: "seasonal", season: "summer", slot: "makeup", name: "Sun Cream Nose",
+    svg: `
+      <ellipse cx="0" cy="2" rx="12" ry="9" fill="#ffffff"/>
+      <circle cx="-4" cy="-2" r="3" fill="#f5f5f5"/>
+    `
+  },
+
+  /* 🎃 halloween */
+  {
+    id: "witchhat", category: "seasonal", season: "halloween", slot: "hats", name: "Witch Hat",
+    svg: `
+      <path d="M4 -84 Q30 -20 40 20 L-40 20 Q-24 -24 4 -84 Z" fill="#2b1b3d"/>
+      <ellipse cx="0" cy="20" rx="56" ry="13" fill="#1c1128"/>
+      <path d="M-34 12 Q0 24 34 12 L34 2 Q0 14 -34 2 Z" fill="#7b1fa2"/>
+      <circle cx="26" cy="6" r="7" fill="#ffb300"/>
+    `
+  },
+  {
+    id: "batwings", category: "seasonal", season: "halloween", slot: "clothes", name: "Bat Wings",
+    svg: `
+      <path d="M-16 -40 Q-60 -46 -84 -12 Q-64 -18 -58 -6 Q-46 -16 -40 -2 Q-30 -14 -18 -6 Z" fill="#2b1b3d"/>
+      <path d="M16 -40 Q60 -46 84 -12 Q64 -18 58 -6 Q46 -16 40 -2 Q30 -14 18 -6 Z" fill="#2b1b3d"/>
+      <path d="M-40 -50 Q0 -62 40 -50 L46 56 Q0 72 -46 56 Z" fill="#37474f"/>
+      <path d="M-40 -50 Q0 -30 40 -50 L44 -30 Q0 -12 -44 -30 Z" fill="#2b1b3d"/>
+    `
+  },
+  {
+    id: "pumpkinbucket", category: "seasonal", season: "halloween", slot: "held", name: "Pumpkin Bucket",
+    svg: `
+      <path d="M-26 -6 q0 -14 26 -14 q26 0 26 14 q2 30 -26 30 q-28 0 -26 -30 Z" fill="#ff8a3d"/>
+      <path d="M-26 -8 q26 10 52 0" stroke="#e0662e" stroke-width="3" fill="none"/>
+      <path d="M-12 -2 l8 10 -8 0 Z M12 -2 l-8 10 8 0 Z" fill="#33261d"/>
+      <path d="M-12 14 q12 8 24 0 q-12 -2 -24 0 Z" fill="#33261d"/>
+      <path d="M-24 -14 q24 -22 48 0" stroke="#5d4037" stroke-width="5" fill="none"/>
+    `
+  },
+  {
+    id: "pumpkinstamp", category: "seasonal", season: "halloween", slot: "badges", name: "Pumpkin Stamp",
+    svg: `
+      <path d="M-18 0 q0 -12 18 -12 q18 0 18 12 q2 20 -18 20 q-20 0 -18 -20 Z" fill="#ff8a3d" stroke="#e0662e" stroke-width="2"/>
+      <path d="M-8 2 l6 8 -6 0 Z M8 2 l-6 8 6 0 Z" fill="#33261d"/>
+      <path d="M-8 12 q8 6 16 0 q-8 -2 -16 0 Z" fill="#33261d"/>
+      <path d="M0 -12 q-2 -8 6 -10" stroke="#43a047" stroke-width="4" fill="none"/>
+    `
+  },
+
+  /* 🎄 winter holidays */
+  {
+    id: "santahat", category: "seasonal", season: "winter", slot: "hats", name: "Santa Hat",
+    svg: `
+      <path d="M-42 12 Q-40 -34 4 -40 Q44 -34 36 6 Q30 30 44 34 Q20 42 8 24 Q-16 26 -42 12 Z" fill="#e53935"/>
+      <ellipse cx="0" cy="20" rx="48" ry="13" fill="#fdfdfd"/>
+      <circle cx="46" cy="34" r="13" fill="#fdfdfd"/>
+    `
+  },
+  {
+    id: "antlers", category: "seasonal", season: "winter", slot: "hats", name: "Reindeer Antlers",
+    svg: `
+      <path d="M-16 16 q-10 -30 -30 -38 m8 20 q-14 -4 -20 -14 m12 32 q-16 2 -24 -6" stroke="#8d6e63" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M16 16 q10 -30 30 -38 m-8 20 q14 -4 20 -14 m-12 32 q16 2 24 -6" stroke="#8d6e63" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M-24 22 Q0 12 24 22" stroke="#e53935" stroke-width="7" fill="none"/>
+      <circle cx="-30" cy="20" r="6" fill="#ffe921"/>
+      <circle cx="30" cy="20" r="6" fill="#ffe921"/>
+    `
+  },
+  {
+    id: "candycane", category: "seasonal", season: "winter", slot: "held", name: "Candy Cane",
+    svg: `
+      <path d="M-6 44 V-14 q0 -18 18 -18 q18 0 18 18" stroke="#fdfdfd" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M-6 44 V-14 q0 -18 18 -18 q18 0 18 18" stroke="#e53935" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="9 9"/>
+    `
+  },
+  {
+    id: "snowmanstamp", category: "seasonal", season: "winter", slot: "badges", name: "Snowman",
+    svg: `
+      <circle cy="8" r="14" fill="#fdfdfd" stroke="#dfe6ec" stroke-width="2"/>
+      <circle cy="-12" r="10" fill="#fdfdfd" stroke="#dfe6ec" stroke-width="2"/>
+      <circle cx="-3" cy="-14" r="1.8" fill="#33261d"/>
+      <circle cx="3" cy="-14" r="1.8" fill="#33261d"/>
+      <path d="M0 -10 l7 2 -7 2 Z" fill="#ff8a3d"/>
+      <rect x="-10" y="-24" width="20" height="4" fill="#33261d"/>
+      <rect x="-7" y="-34" width="14" height="11" fill="#33261d"/>
+    `
+  },
+
+  /* 🐣 spring */
+  {
+    id: "bunnyears", category: "seasonal", season: "spring", slot: "hats", name: "Bunny Ears",
+    svg: `
+      <ellipse cx="-18" cy="-28" rx="13" ry="38" fill="#fdfdfd" transform="rotate(-12 -18 -28)"/>
+      <ellipse cx="18" cy="-28" rx="13" ry="38" fill="#fdfdfd" transform="rotate(12 18 -28)"/>
+      <ellipse cx="-18" cy="-26" rx="6" ry="26" fill="#ffc9d4" transform="rotate(-12 -18 -26)"/>
+      <ellipse cx="18" cy="-26" rx="6" ry="26" fill="#ffc9d4" transform="rotate(12 18 -26)"/>
+      <path d="M-34 12 Q0 22 34 12" stroke="#ff8ab5" stroke-width="8" fill="none"/>
+    `
+  },
+  {
+    id: "flowercrown", category: "seasonal", season: "spring", slot: "hats", name: "Flower Crown",
+    svg: `
+      <path d="M-46 12 Q0 -10 46 12" stroke="#7cb342" stroke-width="7" fill="none"/>
+      <g>
+        <circle cx="-34" cy="6" r="5" fill="#ff6fb5"/><circle cx="-34" cy="6" r="2" fill="#ffe921"/>
+        <circle cx="-14" cy="-3" r="6" fill="#ffffff"/><circle cx="-14" cy="-3" r="2.5" fill="#ffe921"/>
+        <circle cx="8" cy="-4" r="6" fill="#9b59ff"/><circle cx="8" cy="-4" r="2.5" fill="#ffe921"/>
+        <circle cx="30" cy="5" r="5" fill="#ffb142"/><circle cx="30" cy="5" r="2" fill="#fff"/>
+      </g>
+    `
+  },
+  {
+    id: "eggbasket", category: "seasonal", season: "spring", slot: "held", name: "Egg Basket",
+    svg: `
+      <path d="M-26 0 h52 l-6 30 q-20 8 -40 0 Z" fill="#d7a86e" stroke="#b9884f" stroke-width="2"/>
+      <path d="M-26 0 q26 -30 52 0" stroke="#b9884f" stroke-width="5" fill="none"/>
+      <ellipse cx="-11" cy="-2" rx="8" ry="10" fill="#ff8ab5"/>
+      <ellipse cx="4" cy="-4" rx="8" ry="10" fill="#4dd0e1"/>
+      <ellipse cx="16" cy="0" rx="7" ry="9" fill="#ffe921"/>
+      <path d="M-26 6 h52" stroke="#b9884f" stroke-width="4"/>
+    `
+  },
+  {
+    id: "chickstamp", category: "seasonal", season: "spring", slot: "badges", name: "Baby Chick",
+    svg: `
+      <circle cy="4" r="15" fill="#ffe066"/>
+      <circle cy="-12" r="10" fill="#ffe066"/>
+      <circle cx="-3" cy="-14" r="2" fill="#33261d"/>
+      <circle cx="4" cy="-14" r="2" fill="#33261d"/>
+      <path d="M0 -10 l7 3 -7 3 Z" fill="#ff8a3d"/>
+      <path d="M-6 18 v5 M6 18 v5" stroke="#ff8a3d" stroke-width="3" stroke-linecap="round"/>
+    `
   }
 ];

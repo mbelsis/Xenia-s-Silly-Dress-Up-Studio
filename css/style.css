@@ -301,6 +301,65 @@ aside h2 {
 #char-svg .worn { cursor: pointer; }
 #char-svg .worn:hover { opacity: 0.85; }
 
+/* ---------- giggle meter ---------- */
+#giggle-meter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 6px;
+}
+#giggle-face { font-size: 1.3rem; line-height: 1; }
+#giggle-track {
+  flex: 1;
+  height: 16px;
+  border-radius: 999px;
+  background: #f0e4d4;
+  overflow: hidden;
+  box-shadow: inset 0 2px 0 rgba(0,0,0,0.06);
+}
+#giggle-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffd54f, #ff8a3d, #ff6fb5, #9b59ff);
+  background-size: 300% 100%;
+  transition: width 0.35s ease;
+}
+.giggle-label { font-size: 0.66rem; color: #a08a76; white-space: nowrap; }
+
+/* ---------- tickling ---------- */
+#char-svg.wiggle { animation: wiggle 0.5s ease-in-out; }
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(-6deg) scale(1.03); }
+  35% { transform: rotate(6deg) scale(0.98); }
+  55% { transform: rotate(-4deg) scale(1.02); }
+  75% { transform: rotate(4deg); }
+}
+
+/* ---------- maximum silly celebration ---------- */
+.burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 6;
+}
+.burst i {
+  position: absolute;
+  top: -20px;
+  width: 12px;
+  height: 18px;
+  border-radius: 3px;
+  animation: burst-fall 2.6s linear forwards;
+}
+@keyframes burst-fall {
+  from { transform: translateY(0) rotate(0deg); opacity: 1; }
+  to   { transform: translateY(105vh) rotate(720deg); opacity: 0.9; }
+}
+
 /* character name tag */
 #name-tag {
   display: flex;
@@ -415,6 +474,72 @@ aside h2 {
 }
 .bg-btn:hover { transform: scale(1.15); }
 .bg-btn.selected { border-color: var(--purple); background: #ede3ff; }
+
+/* ---------- saved looks ---------- */
+#looks-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 2px dashed #eee0cc;
+}
+
+#save-look-btn {
+  font-family: inherit;
+  font-size: 0.8rem;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--purple);
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.12);
+}
+#save-look-btn:active { transform: translateY(2px); box-shadow: none; }
+
+#looks-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  flex: 1;
+  min-height: 62px;
+}
+.looks-empty { font-size: 0.72rem; color: #b6a693; }
+
+.look-card {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 58px;
+  border-radius: 10px;
+  border: 3px solid #e4d7ff;
+  background: #fff;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+.look-card:hover { transform: scale(1.12) rotate(-2deg); border-color: var(--purple); }
+.look-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.look-del {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 0 8px 0 8px;
+  background: rgba(229,115,115,0.9);
+  color: #fff;
+  font-size: 0.6rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.look-del:hover { background: #c62828; }
 
 #hint {
   font-size: 0.85rem;

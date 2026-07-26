@@ -40,6 +40,8 @@
     swapHead: null,
     // what the character is saying, when the player typed it themselves
     customLine: "",
+    // how many times this character has been tickled (feeds the giggle meter)
+    tickles: 0,
     // custom character names, persisted in localStorage
     names: loadNames()
   };
@@ -291,6 +293,24 @@
 
   const itemById = (id) => ITEMS.find((i) => i.id === id);
 
+  /* seasonal items live in their own drawer but land in a normal slot */
+  const slotOf = (item) => item.slot || item.category;
+
+  /* which special drawer is open right now, if any */
+  function currentSeason() {
+    const now = new Date();
+    const m = now.getMonth() + 1, d = now.getDate();
+    const after = (mm, dd) => m > mm || (m === mm && d >= dd);
+    const before = (mm, dd) => m < mm || (m === mm && d <= dd);
+    if (after(12, 1) || before(1, 6)) return { id: "winter", label: "🎄 Holidays" };
+    if (after(10, 10) && before(11, 2)) return { id: "halloween", label: "🎃 Halloween" };
+    if (after(3, 15) && before(4, 30)) return { id: "spring", label: "🐣 Spring" };
+    if (after(6, 1) && before(9, 10)) return { id: "summer", label: "🌞 Summer" };
+    return null;
+  }
+
+  const SEASON = currentSeason();
+
   /* hair & beard art use the HAIRC token as their color; fill it in at render */
   function itemArt(item) {
     const color = state.itemColors[item.category];
@@ -445,6 +465,7 @@
               </g>`;
     }
     charSvg.innerHTML = out + weatherSvg();
+    updateGiggle();
   }
 
   function renderShelf() {
@@ -457,6 +478,7 @@
       btn.querySelector("span").textContent = getName(id);
       btn.addEventListener("click", () => {
         state.characterId = id;
+        state.tickles = 0;
         renderShelf();
         renderCharacter();
         renderNameTag();
@@ -494,7 +516,10 @@
 
   function renderTabs() {
     tabsEl.innerHTML = "";
-    for (const cat of CATEGORIES) {
+    const tabs = SEASON
+      ? [...CATEGORIES, { id: "seasonal", label: SEASON.label }]
+      : CATEGORIES;
+    for (const cat of tabs) {
       const btn = document.createElement("button");
       btn.className = "tab" + (cat.id === state.tab ? " active" : "");
       btn.textContent = cat.label;
@@ -509,7 +534,11 @@
 
   function renderGrid() {
     gridEl.innerHTML = "";
-    for (const item of ITEMS.filter((i) => i.category === state.tab)) {
+    const inDrawer = ITEMS.filter((i) =>
+      i.category === state.tab &&
+      (i.category !== "seasonal" || (SEASON && i.season === SEASON.id))
+    );
+    for (const item of inDrawer) {
       const el = document.createElement("div");
       el.className = "cab-item";
       el.dataset.itemId = item.id;
@@ -704,6 +733,83 @@
     }
   }
 
+  /* ---------------- giggle meter ---------------- */
+
+  /* the items that are inherently ridiculous — everything else still counts,
+     just for less */
+  const SILLY_ITEMS = new Set([
+    "banana", "duck", "fishbowl", "carrot", "honeypot", "clownhat", "sombrero",
+    "partyhat", "firehat", "astrohelmet", "policecap", "pilotcap", "propeller",
+    "punk", "mohawk", "afro", "megacurls", "pigtails", "santabeard",
+    "dino", "tutu", "uglysweater", "flamingo", "mermaid", "grassskirt",
+    "clown", "flippers", "bunny", "rocket", "macaroni", "fishskel", "peanuts",
+    "nose", "mustache", "unibrow", "fangs", "whiskerpaint", "snorkel",
+    "chicken", "lollipop", "icecream", "boombox", "wand",
+    "ufostamp", "rainbowstamp", "dinostamp", "starglasses", "heartglasses"
+  ]);
+
+  const GIGGLE_MAX = 60;
+  const FACES = ["😐", "🙂", "😄", "😆", "🤣"];
+  let giggleWasFull = false;
+
+  function giggleScore() {
+    let score = 0;
+    for (const cat of Object.keys(state.worn)) {
+      const id = state.worn[cat];
+      if (!id) continue;
+      score += SILLY_ITEMS.has(id) ? 6 : 2;
+    }
+    if (state.itemColors.hair === "rainbow" && state.worn.hair) score += 5;
+    if (state.itemColors.beards === "rainbow" && state.worn.beards) score += 5;
+    if (state.worn.beards) score += 2;                       // a beard is funny on anyone
+    if (state.swapHead) score += 8;
+    const skin = state.skinTones[state.characterId];
+    if (skin === "#7ed957" || skin === "#8ab6f9") score += 5;
+    const fur = state.furColors[state.characterId];
+    if (fur === "#ff8ab5" || fur === "#7ec8e3") score += 5;
+    const eyes = getEyeShape(state.characterId);
+    if (eyes === "star" || eyes === "heart") score += 4;
+    const mouth = getMouthShape(state.characterId);
+    if (mouth === "tongue" || mouth === "laugh") score += 3;
+    if (dancing) score += 5;
+    if (state.weather === "confetti") score += 4;
+    else if (state.weather !== "none") score += 2;
+    if (state.customLine) score += 3;
+    score += Math.min(state.tickles, 3) * 2;
+    return score;
+  }
+
+  const giggleFill = document.getElementById("giggle-fill");
+  const giggleFace = document.getElementById("giggle-face");
+
+  function updateGiggle() {
+    const pct = Math.min(100, Math.round((giggleScore() / GIGGLE_MAX) * 100));
+    giggleFill.style.width = pct + "%";
+    giggleFace.textContent = FACES[Math.min(FACES.length - 1, Math.floor(pct / 25))];
+    if (pct >= 100 && !giggleWasFull) celebrate();
+    giggleWasFull = pct >= 100;
+  }
+
+  function celebrate() {
+    playSound("fanfare");
+    say(["MAXIMUM SILLY!!! 🎉", "THE SILLIEST! 🏆", "I can't stop laughing!"]);
+    bounce();
+
+    const burst = document.createElement("div");
+    burst.className = "burst";
+    const colors = ["#ff6fb5", "#ffe921", "#3ecf5a", "#3aa0ff", "#9b59ff", "#ff8a3d"];
+    for (let i = 0; i < 40; i++) {
+      const bit = document.createElement("i");
+      bit.style.left = Math.random() * 100 + "%";
+      bit.style.background = colors[i % colors.length];
+      bit.style.animationDelay = (Math.random() * 0.5).toFixed(2) + "s";
+      bit.style.transform = `rotate(${Math.floor(Math.random() * 360)}deg)`;
+      burst.appendChild(bit);
+    }
+    document.getElementById("stage-wrap").appendChild(burst);
+    setTimeout(() => burst.remove(), 3200);
+  }
+
   /* ---------------- weather picker ---------------- */
 
   const weatherPickerEl = document.getElementById("weather-picker");
@@ -824,6 +930,7 @@
     const done = () => {
       state.customLine = input.value.trim();
       showCustomLine();
+      updateGiggle();
       if (state.customLine) { bounce(); playSound("on"); }
     };
     input.addEventListener("keydown", (e) => {
@@ -843,26 +950,120 @@
     charSvg.classList.add("bounce");
   }
 
+  /* ---------------- sound ---------------- */
+
+  let noiseBuffer = null;
+
+  function audioCtxNow() {
+    const ctx = Jukebox.context();
+    if (ctx.state === "suspended") ctx.resume();
+    return ctx;
+  }
+
+  /* one oscillator note; `glide` slides the pitch, `wobble` adds a warble */
+  function blipOn(ctx, freq, at, dur, type, level, glide, wobble) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || "sine";
+    osc.frequency.setValueAtTime(freq, at);
+    if (glide) osc.frequency.exponentialRampToValueAtTime(glide, at + dur);
+    if (wobble) {
+      const lfo = ctx.createOscillator();
+      const depth = ctx.createGain();
+      lfo.frequency.value = wobble;
+      depth.gain.value = freq * 0.25;
+      lfo.connect(depth).connect(osc.frequency);
+      lfo.start(at);
+      lfo.stop(at + dur + 0.02);
+    }
+    gain.gain.setValueAtTime(level, at);
+    gain.gain.exponentialRampToValueAtTime(0.001, at + dur);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(at);
+    osc.stop(at + dur + 0.02);
+  }
+
+  /* filtered noise — crunches, whooshes and splashes */
+  function noiseOn(ctx, at, dur, level, type, freq) {
+    if (!noiseBuffer) {
+      const len = Math.floor(ctx.sampleRate * 0.4);
+      noiseBuffer = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const src = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    const filt = ctx.createBiquadFilter();
+    src.buffer = noiseBuffer;
+    filt.type = type || "bandpass";
+    filt.frequency.setValueAtTime(freq || 1200, at);
+    if (type === "lowpass") filt.frequency.exponentialRampToValueAtTime(200, at + dur);
+    gain.gain.setValueAtTime(level, at);
+    gain.gain.exponentialRampToValueAtTime(0.001, at + dur);
+    src.connect(filt).connect(gain).connect(ctx.destination);
+    src.start(at);
+    src.stop(at + dur + 0.02);
+  }
+
+  /* each of these gets its own voice when you put it on */
+  const ITEM_SOUNDS = {
+    clown:      (c, t) => { blipOn(c, 900, t, 0.12, "sine", 0.12, 1500); blipOn(c, 1500, t + 0.13, 0.12, "sine", 0.1, 800); },
+    nose:       (c, t) => { blipOn(c, 180, t, 0.13, "square", 0.16, 150); blipOn(c, 180, t + 0.17, 0.16, "square", 0.16, 140); },
+    propeller:  (c, t) => blipOn(c, 320, t, 0.7, "sawtooth", 0.07, 380, 22),
+    boombox:    (c, t) => [392, 523, 659, 523].forEach((f, i) => blipOn(c, f, t + i * 0.11, 0.13, "square", 0.1)),
+    rocket:     (c, t) => { noiseOn(c, t, 0.6, 0.16, "lowpass", 4000); blipOn(c, 120, t, 0.6, "sawtooth", 0.06, 60); },
+    duck:       (c, t) => { blipOn(c, 620, t, 0.11, "sawtooth", 0.12, 380); blipOn(c, 560, t + 0.14, 0.13, "sawtooth", 0.12, 320); },
+    chicken:    (c, t) => blipOn(c, 700, t, 0.35, "sawtooth", 0.11, 420, 14),
+    wand:       (c, t) => [880, 1174, 1568, 2093].forEach((f, i) => blipOn(c, f, t + i * 0.06, 0.16, "sine", 0.08)),
+    fishbowl:   (c, t) => blipOn(c, 300, t, 0.25, "sine", 0.13, 700),
+    honeypot:   (c, t) => blipOn(c, 130, t, 0.5, "sawtooth", 0.07, 120, 30),
+    carrot:     (c, t) => { noiseOn(c, t, 0.09, 0.2, "bandpass", 2400); noiseOn(c, t + 0.12, 0.08, 0.16, "bandpass", 1800); },
+    macaroni:   (c, t) => noiseOn(c, t, 0.12, 0.16, "bandpass", 2000),
+    policecap:  (c, t) => { blipOn(c, 700, t, 0.22, "square", 0.09); blipOn(c, 520, t + 0.24, 0.22, "square", 0.09); },
+    firehat:    (c, t) => blipOn(c, 480, t, 0.5, "square", 0.09, 900, 4),
+    astrohelmet:(c, t) => { blipOn(c, 1200, t, 0.08, "sine", 0.09); blipOn(c, 1600, t + 0.12, 0.12, "sine", 0.09); },
+    pilotcap:   (c, t) => blipOn(c, 90, t, 0.6, "sawtooth", 0.08, 110, 6),
+    flippers:   (c, t) => { blipOn(c, 150, t, 0.12, "sine", 0.13, 90); blipOn(c, 140, t + 0.15, 0.12, "sine", 0.11, 80); },
+    snorkel:    (c, t) => { blipOn(c, 260, t, 0.16, "sine", 0.1, 520); blipOn(c, 300, t + 0.2, 0.16, "sine", 0.1, 600); },
+    icecream:   (c, t) => blipOn(c, 400, t, 0.3, "sine", 0.1, 900),
+    lollipop:   (c, t) => blipOn(c, 500, t, 0.28, "sine", 0.1, 1000),
+    tablet:     (c, t) => [660, 880, 660, 990].forEach((f, i) => blipOn(c, f, t + i * 0.07, 0.07, "square", 0.08)),
+    santabeard: (c, t) => [1568, 2093, 1568].forEach((f, i) => blipOn(c, f, t + i * 0.1, 0.22, "triangle", 0.07)),
+    uglysweater:(c, t) => [1046, 1318, 1568].forEach((f, i) => blipOn(c, f, t + i * 0.09, 0.25, "triangle", 0.07)),
+    crown:      (c, t) => [523, 659, 784].forEach((f, i) => blipOn(c, f, t + i * 0.09, 0.2, "square", 0.09)),
+    guitarstamp:(c, t) => [330, 415, 494, 659].forEach((f, i) => blipOn(c, f, t + i * 0.05, 0.3, "sawtooth", 0.07)),
+    clownhat:   (c, t) => { blipOn(c, 180, t, 0.12, "square", 0.15, 150); blipOn(c, 900, t + 0.15, 0.12, "sine", 0.1, 1400); }
+  };
+
+  function playItemSound(id) {
+    try {
+      const voice = ITEM_SOUNDS[id];
+      if (!voice) return playSound("on");
+      voice(audioCtxNow(), audioCtxNow().currentTime);
+    } catch (e) { /* sound is a bonus */ }
+  }
+
   /* tiny cartoon sounds, no audio files needed (shares the Jukebox context) */
   function playSound(kind) {
     try {
-      const audioCtx = Jukebox.context();
-      if (audioCtx.state === "suspended") audioCtx.resume();
+      const audioCtx = audioCtxNow();
       const t = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain).connect(audioCtx.destination);
-      gain.gain.setValueAtTime(0.15, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-      if (kind === "off") {         // descending "pop"
-        osc.frequency.setValueAtTime(500, t);
-        osc.frequency.exponentialRampToValueAtTime(180, t + 0.25);
-      } else {                      // rising "boing"
-        osc.frequency.setValueAtTime(220, t);
-        osc.frequency.exponentialRampToValueAtTime(660, t + 0.18);
+      const blip = (freq, at, dur, type, level, glide) =>
+        blipOn(audioCtx, freq, at, dur, type, level, glide);
+
+      if (kind === "off") {                       // descending "pop"
+        blip(500, t, 0.25, "sine", 0.15, 180);
+      } else if (kind === "giggle") {             // hee-hee-hee
+        [0, 0.09, 0.18, 0.27].forEach((d, i) => {
+          blip(560 + (i % 2 ? 130 : 0), t + d, 0.09, "triangle", 0.12, 700 + i * 40);
+        });
+      } else if (kind === "fanfare") {            // ta-daaa!
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          blip(f, t + i * 0.11, i === 3 ? 0.5 : 0.14, "square", 0.11);
+        });
+      } else {                                    // rising "boing"
+        blip(220, t, 0.28, "sine", 0.15, 660);
       }
-      osc.start(t);
-      osc.stop(t + 0.3);
     } catch (e) { /* sound is a bonus, never break the game for it */ }
   }
 
@@ -870,10 +1071,10 @@
 
   function equip(itemId) {
     const item = itemById(itemId);
-    state.worn[item.category] = itemId;
+    state.worn[slotOf(item)] = itemId;
     renderCharacter();
     bounce();
-    playSound("on");
+    playItemSound(itemId);
     say(COMBO_QUIPS[`${itemId}:${state.characterId}`] || QUIPS[itemId] || QUIPS.generic);
   }
 
@@ -884,9 +1085,62 @@
     say(QUIPS.remove);
   }
 
+  const TICKLES = [
+    "Hee hee hee!", "That tickles!", "Stop it! ...do it again!",
+    "HAHAHA! No fair!", "Eeeek! Hee hee!", "Not the tickles!"
+  ];
+
+  /* tickle an animal and you get the animal, not a giggle */
+  const ANIMAL_NOISES = {
+    cat: ["Meeeow!", "Mrrrp!"], cat2: ["Meow meow!", "Purrrr!"],
+    dog: ["WOOF WOOF!", "Bork!"], dog2: ["Arf arf!", "WOOF!"],
+    cow: ["MOOOOO!", "Moo?"], horse: ["Neiiigh!", "Snort!"],
+    pig: ["Oink oink!", "Snuffle snuffle!"], frog: ["Ribbit!", "Croak!"],
+    bunny: ["Sniff sniff!", "Thump thump!"], bear: ["Grrrowl!", "Rawr!"],
+    elephant: ["TOOOOOT!", "Pawoo!"], lizard: ["Hiss!", "Blep."],
+    fish: ["Blub blub!", "Glub!"], parrot: ["SQUAWK!", "Pretty bird!"]
+  };
+
+  const VOICES = {
+    cat:      (c, t) => blipOn(c, 700, t, 0.3, "sawtooth", 0.1, 480, 8),
+    cat2:     (c, t) => blipOn(c, 780, t, 0.28, "sawtooth", 0.1, 520, 8),
+    dog:      (c, t) => { blipOn(c, 260, t, 0.12, "square", 0.13, 160); blipOn(c, 240, t + 0.16, 0.12, "square", 0.12, 150); },
+    dog2:     (c, t) => { blipOn(c, 320, t, 0.1, "square", 0.12, 200); blipOn(c, 300, t + 0.13, 0.1, "square", 0.12, 190); },
+    cow:      (c, t) => blipOn(c, 190, t, 0.75, "sawtooth", 0.12, 110),
+    horse:    (c, t) => { blipOn(c, 620, t, 0.45, "sawtooth", 0.1, 300, 18); noiseOn(c, t + 0.4, 0.2, 0.08, "bandpass", 900); },
+    pig:      (c, t) => [0, 0.16, 0.32].forEach((d) => blipOn(c, 300, t + d, 0.11, "sawtooth", 0.11, 190)),
+    frog:     (c, t) => { blipOn(c, 190, t, 0.13, "square", 0.13, 150, 30); blipOn(c, 170, t + 0.17, 0.15, "square", 0.13, 130, 30); },
+    bunny:    (c, t) => [0, 0.12].forEach((d) => noiseOn(c, t + d, 0.07, 0.12, "bandpass", 2600)),
+    bear:     (c, t) => blipOn(c, 110, t, 0.7, "sawtooth", 0.13, 70, 5),
+    elephant: (c, t) => blipOn(c, 340, t, 0.75, "square", 0.11, 620, 3),
+    lizard:   (c, t) => noiseOn(c, t, 0.5, 0.11, "highpass", 5200),
+    fish:     (c, t) => [0, 0.15, 0.3].forEach((d, i) => blipOn(c, 320 + i * 40, t + d, 0.12, "sine", 0.1, 620)),
+    parrot:   (c, t) => { blipOn(c, 1100, t, 0.16, "sawtooth", 0.1, 700, 20); blipOn(c, 900, t + 0.2, 0.2, "sawtooth", 0.1, 1300, 20); }
+  };
+
+  function playCharacterVoice(id) {
+    try {
+      const voice = VOICES[id];
+      if (!voice) return playSound("giggle");
+      const ctx = audioCtxNow();
+      voice(ctx, ctx.currentTime);
+    } catch (e) { /* sound is a bonus */ }
+  }
+
+  function tickle() {
+    state.tickles = Math.min(state.tickles + 1, 6);
+    charSvg.classList.remove("wiggle");
+    void charSvg.offsetWidth;
+    charSvg.classList.add("wiggle");
+    playCharacterVoice(state.characterId);
+    say(ANIMAL_NOISES[state.characterId] || TICKLES);
+    updateGiggle();
+  }
+
   charSvg.addEventListener("click", (e) => {
     const worn = e.target.closest(".worn");
     if (worn) removeWorn(worn.dataset.cat);
+    else tickle();                    // poke the character and they giggle
   });
 
   /* ---------------- drag & drop (pointer events: mouse + touch) ---------------- */
@@ -1046,19 +1300,14 @@
 
   /* photo booth: render the stage SVG (background included) to a canvas.
      With a background → JPG; with "none" → transparent PNG. */
-  document.getElementById("photo-btn").addEventListener("click", () => {
-    const W = 640, H = 1040, BAND = 110; // 2x the 320x520 viewBox + name band
-    const plain = state.background === "none";
-
-    // stand-alone copy of the stage SVG, with the shared defs (rainbow
-    // gradient) baked in so hair colors survive outside the page
+  /* a stand-alone copy of the stage as a blob URL: shared defs baked in (so
+     gradient hair survives) and the CSS-driven weather frozen in place */
+  function stageSvgUrl(w, h) {
     const svgEl = charSvg.cloneNode(true);
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svgEl.setAttribute("width", W);
-    svgEl.setAttribute("height", H);
+    svgEl.setAttribute("width", w);
+    svgEl.setAttribute("height", h);
 
-    // the weather particles get their look and motion from the stylesheet,
-    // which does not travel with an exported SVG — bake both in
     const live = charSvg.querySelectorAll(".weather > *");
     const copies = svgEl.querySelectorAll(".weather > *");
     live.forEach((el, i) => {
@@ -1074,10 +1323,16 @@
     const defs = document.querySelector("#shared-defs defs");
     if (defs) svgEl.insertBefore(defs.cloneNode(true), svgEl.firstChild);
 
-    const svgText = new XMLSerializer().serializeToString(svgEl);
-    const svgUrl = URL.createObjectURL(
-      new Blob([svgText], { type: "image/svg+xml;charset=utf-8" })
+    return URL.createObjectURL(
+      new Blob([new XMLSerializer().serializeToString(svgEl)],
+               { type: "image/svg+xml;charset=utf-8" })
     );
+  }
+
+  document.getElementById("photo-btn").addEventListener("click", () => {
+    const W = 640, H = 1040, BAND = 110; // 2x the 320x520 viewBox + name band
+    const plain = state.background === "none";
+    const svgUrl = stageSvgUrl(W, H);
 
     const img = new Image();
     img.onload = () => {
@@ -1146,6 +1401,7 @@
     charSvg.classList.remove("bounce");
     danceBtn.classList.toggle("off", !dancing);
     danceBtn.textContent = dancing ? "🛑 Stop" : "💃 Dance!";
+    updateGiggle();
     if (dancing) {
       if (!Jukebox.isOn()) { Jukebox.toggle(); renderMusicBtn(); }  // music for the dancer
       playSound("on");
@@ -1179,6 +1435,145 @@
     playSound("off");
     say(["Phew, my own head!", "That's better."]);
   });
+
+  /* ---------------- saved looks ---------------- */
+
+  const LOOKS_KEY = "dressup-looks";
+  const MAX_LOOKS = 12;
+  const looksRow = document.getElementById("looks-row");
+
+  function loadLooks() {
+    try { return JSON.parse(localStorage.getItem(LOOKS_KEY)) || []; }
+    catch (e) { return []; }
+  }
+
+  function storeLooks(list) {
+    try { localStorage.setItem(LOOKS_KEY, JSON.stringify(list)); return true; }
+    catch (e) { return false; }
+  }
+
+  /* small picture of the stage, so a saved look is recognisable at a glance */
+  function stageThumb() {
+    return new Promise((resolve) => {
+      const W = 104, H = 169;
+      const url = stageSvgUrl(W, H);
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = W; c.height = H;
+        const ctx = c.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, 0, 0, W, H);
+        URL.revokeObjectURL(url);
+        resolve(c.toDataURL("image/jpeg", 0.6));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+      img.src = url;
+    });
+  }
+
+  async function saveLook() {
+    const looks = loadLooks();
+    if (looks.length >= MAX_LOOKS) {
+      say(["My wardrobe is full! Delete one first."]);
+      return;
+    }
+    const id = state.characterId;
+    const look = {
+      id: "look" + Date.now().toString(36),
+      characterId: id,
+      name: getName(id),
+      worn: { ...state.worn },
+      itemColors: { ...state.itemColors },
+      background: state.background,
+      weather: state.weather,
+      swapHead: state.swapHead,
+      skin: state.skinTones[id] || null,
+      fur: state.furColors[id] || null,
+      eyeColor: state.eyeColors[id] || null,
+      eyeShape: state.eyeShapes[id] || null,
+      mouthShape: state.mouthShapes[id] || null,
+      line: state.customLine,
+      thumb: await stageThumb()
+    };
+    looks.push(look);
+    if (!storeLooks(looks)) {
+      say(["No room to save that one, sorry!"]);
+      return;
+    }
+    renderLooks();
+    playSound("fanfare");
+    say(["Saved! ⭐", "Into the lookbook!", "I'll remember this one."]);
+  }
+
+  function applyLook(look) {
+    if (!CHARACTERS[look.characterId]) {
+      say(["That character went away!"]);
+      return;
+    }
+    state.characterId = look.characterId;
+    state.worn = { ...state.worn, ...look.worn };
+    state.itemColors = { ...state.itemColors, ...look.itemColors };
+    state.background = look.background;
+    state.weather = look.weather;
+    state.swapHead = look.swapHead && CHARACTERS[look.swapHead] ? look.swapHead : null;
+    state.customLine = look.line || "";
+    state.tickles = 0;
+    if (look.skin) state.skinTones[look.characterId] = look.skin;
+    if (look.fur) state.furColors[look.characterId] = look.fur;
+    if (look.eyeColor) state.eyeColors[look.characterId] = look.eyeColor;
+    if (look.eyeShape) state.eyeShapes[look.characterId] = look.eyeShape;
+    if (look.mouthShape) state.mouthShapes[look.characterId] = look.mouthShape;
+
+    renderShelf();
+    renderCharacter();
+    renderNameTag();
+    renderSkinPicker();
+    renderEyePicker();
+    renderFacePicker();
+    renderWeatherPicker();
+    renderBgPicker();
+    renderSwapButtons();
+    renderGrid();
+    showCustomLine();
+    bounce();
+    playSound("on");
+    if (!state.customLine) say(["I'm back!", "My favourite outfit!", "Ta-daa, again!"]);
+  }
+
+  function renderLooks() {
+    const looks = loadLooks();
+    looksRow.innerHTML = "";
+    if (!looks.length) {
+      looksRow.innerHTML = "<span class='looks-empty'>Save a look to keep it forever</span>";
+      return;
+    }
+    for (const look of looks) {
+      const card = document.createElement("div");
+      card.className = "look-card";
+      card.title = "Wear this look again";
+      card.innerHTML = look.thumb
+        ? `<img src="${look.thumb}" alt="${look.name}">`
+        : `<span>${look.name}</span>`;
+      card.addEventListener("click", () => applyLook(look));
+
+      const del = document.createElement("button");
+      del.className = "look-del";
+      del.textContent = "✕";
+      del.title = "Delete this look";
+      del.addEventListener("click", (e) => {
+        e.stopPropagation();
+        storeLooks(loadLooks().filter((l) => l.id !== look.id));
+        renderLooks();
+        playSound("off");
+      });
+      card.appendChild(del);
+      looksRow.appendChild(card);
+    }
+  }
+
+  document.getElementById("save-look-btn").addEventListener("click", saveLook);
 
   /* ---------------- music ---------------- */
 
@@ -1235,4 +1630,5 @@
   renderWeatherPicker();
   renderSwapButtons();
   renderPhotoOpts();
+  renderLooks();
 })();

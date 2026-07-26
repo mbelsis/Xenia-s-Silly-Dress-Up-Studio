@@ -72,6 +72,29 @@ sound effects play.
 - **🌦️ Weather picker** — rain (with puddles if rain boots are on), snow,
   rising bubbles, or confetti drifting over the scene. Animated with CSS and
   baked into photos at the moment the picture is taken.
+- **Tickle** — tapping the character anywhere that isn't clothing makes them
+  wiggle, giggle and squeal ("Stop it! ...do it again!"). Tapping a worn item
+  still takes it off.
+- **😄 Giggle-o-meter** — a bar under the stage that fills the sillier the look
+  gets. Ridiculous items (banana hat, clown shoes, rubber chicken) score far
+  more than sensible ones, with bonuses for rainbow hair, a swapped head, alien
+  skin, star or heart eyes, a stuck-out tongue, dancing, confetti, a typed
+  line, and tickling. Fill it to 100% and the whole stage erupts in confetti
+  with a fanfare and a "MAXIMUM SILLY!!!" — the face on the meter goes
+  😐 → 🙂 → 😄 → 😆 → 🤣 on the way up.
+- **💾 Save Look** — keeps the whole picture (character, every worn item,
+  colours, background, weather, swapped head and typed line) as a little
+  thumbnail card under the stage. Tap a card to wear that look again, ✕ to
+  throw it out. Up to 12, stored in localStorage — the first thing in the game
+  that survives closing the browser.
+- **Seasonal drawer** — an extra cabinet drawer that appears on its own at the
+  right time of year and disappears afterwards: 🌞 Summer (Jun–Sep), 🎃
+  Halloween (mid Oct–Nov 2), 🎄 Holidays (Dec–Jan 6), 🐣 Spring (mid Mar–Apr).
+  Seasonal items declare a `slot`, so a Santa hat still lands on the head.
+- **Item voices** — each item makes its own noise when it goes on: clown shoes
+  squeak, the clown nose honks, the propeller whirrs, rocket boots roar, the
+  duck quacks, the boombox plays a riff, the carrot crunches. Tickling an
+  animal gets that animal's own sound — a moo, a ribbit, an oink, a SQUAWK.
 - **🎵 Music button** — toggles the background music (on by default, choice
   remembered). The tune is generated live: a C–G–Am–F progression with a
   melody that random-walks a pentatonic scale, so it stays in tune and never

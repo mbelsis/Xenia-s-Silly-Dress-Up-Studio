@@ -43,8 +43,14 @@ the Home Screen like a normal app and works offline.
 - **Silly reactions** — every item gets a quip, and the right animal in the
   right item gets a special one ("DO NOT eat your necklace. DO NOT.")
 - **💃 Dance**, **💬 Say...** (type what they say), **🔀 Head Swap**, **🎲
-  Surprise Me!**, and background music that is generated live so it never
-  loops the same way twice
+  Surprise Me!**, ticklish characters, and background music that is generated
+  live so it never loops the same way twice
+- **😄 Giggle-o-meter** — the sillier the outfit, the fuller it gets; max it out
+  and the screen erupts in confetti
+- **💾 Saved looks** — keep favourite outfits as thumbnail cards and wear them
+  again any time
+- **Seasonal drawer** — summer, Halloween, winter-holiday and spring items that
+  turn up on their own at the right time of year
 - **📸 Photo booth** — save the finished character as a picture, with the scene,
   the speech bubble and a name plate
 
