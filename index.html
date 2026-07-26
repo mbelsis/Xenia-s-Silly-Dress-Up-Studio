@@ -21,8 +21,13 @@
   <h1>🎩 Xenia's Silly Dress-Up Studio</h1>
   <div class="toolbar-buttons">
     <button id="surprise-btn" class="big-btn">🎲 Surprise Me!</button>
+    <button id="dance-btn" class="big-btn dance">💃 Dance!</button>
+    <button id="talk-btn" class="big-btn talk">💬 Say...</button>
+    <button id="swap-btn" class="big-btn swap">🔀 Head Swap</button>
+    <button id="unswap-btn" class="big-btn secondary hidden" title="Give the head back">↩️</button>
     <button id="photo-btn" class="big-btn photo">📸 Photo!</button>
     <button id="reset-btn" class="big-btn secondary">🧺 Reset</button>
+    <button id="music-btn" class="big-btn music" title="Background music">🎵</button>
     <div id="photo-opts" title="Photo name color &amp; stars"></div>
   </div>
 </header>
@@ -38,7 +43,7 @@
 
   <!-- Stage -->
   <section id="stage-wrap">
-    <div id="bubble" class="hidden"></div>
+    <div id="bubble" class="hidden" title="Click to type what they say"></div>
     <div id="stage">
       <svg id="char-svg" viewBox="0 0 320 520" aria-label="Your character"></svg>
     </div>
@@ -52,6 +57,7 @@
       <div id="face-picker" class="picker-row" title="Pick an eye shape"></div>
       <div id="mouth-picker" class="picker-row" title="Pick a mouth shape"></div>
       <div id="bg-picker" class="picker-row" title="Pick a background"></div>
+      <div id="weather-picker" class="picker-row" title="Pick the weather"></div>
     </div>
     <p id="hint">Drag clothes from the cabinet onto your character! Tap a worn item to take it off.</p>
   </section>
@@ -123,6 +129,16 @@
 <script src="js/characters.js"></script>
 <script src="js/wardrobe.js"></script>
 <script src="js/photo.js"></script>
+<script src="js/music.js"></script>
 <script src="js/main.js"></script>
+<script>
+  // offline support; needs https:// or localhost, so it quietly does nothing
+  // when the game is opened over a plain LAN address
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
 </body>
 </html>

@@ -9,6 +9,8 @@ const CHARACTERS = {
 
   zoe: {
     name: "Zoe",
+    neckY: 196,
+    headY: 178,
     skin: "#f2c49b",
     anchors: {
       hats:    { x: 160, y: 52,  scale: 1.0 },
@@ -51,6 +53,8 @@ const CHARACTERS = {
 
   cat: {
     name: "Sir Fluffington",
+    neckY: 258,
+    headY: 213,
     fur: "#ef9a3c",
     anchors: {
       hats:    { x: 160, y: 74,  scale: 1.1 },
@@ -100,6 +104,8 @@ const CHARACTERS = {
 
   dog: {
     name: "Biscuit",
+    neckY: 254,
+    headY: 206,
     fur: "#b98753",
     anchors: {
       hats:    { x: 160, y: 70,  scale: 1.1 },
@@ -145,6 +151,8 @@ const CHARACTERS = {
 
   leo: {
     name: "Leo",
+    neckY: 196,
+    headY: 178,
     skin: "#e8b78a",
     anchors: {
       hats:    { x: 160, y: 52,  scale: 1.0 },
@@ -195,6 +203,8 @@ const CHARACTERS = {
 
   mia: {
     name: "Mia",
+    neckY: 196,
+    headY: 178,
     skin: "#c68863",
     anchors: {
       hats:    { x: 160, y: 52,  scale: 1.0 },
@@ -243,6 +253,8 @@ const CHARACTERS = {
 
   sofia: {
     name: "Sofia",
+    neckY: 188,
+    headY: 168,
     skin: "#f2c49b",
     anchors: {
       hats:    { x: 160, y: 46,  scale: 1.0 },
@@ -290,6 +302,8 @@ const CHARACTERS = {
 
   max: {
     name: "Max",
+    neckY: 190,
+    headY: 182,
     skin: "#e8b78a",
     anchors: {
       hats:    { x: 160, y: 48,  scale: 1.0 },
@@ -338,6 +352,8 @@ const CHARACTERS = {
 
   tom: {
     name: "Tom",
+    neckY: 190,
+    headY: 170,
     skin: "#d9a06b",
     anchors: {
       hats:    { x: 160, y: 48,  scale: 1.0 },
@@ -387,6 +403,8 @@ const CHARACTERS = {
 
   grandpa: {
     name: "Grandpa Joe",
+    neckY: 192,
+    headY: 182,
     skin: "#eec9a2",
     anchors: {
       hats:    { x: 160, y: 46,  scale: 1.0 },
@@ -443,6 +461,8 @@ const CHARACTERS = {
 
   granny: {
     name: "Granny Rose",
+    neckY: 190,
+    headY: 168,
     skin: "#eec9a2",
     anchors: {
       hats:    { x: 160, y: 44,  scale: 1.0 },
@@ -498,6 +518,8 @@ const CHARACTERS = {
 
   cat2: {
     name: "Mochi",
+    neckY: 258,
+    headY: 213,
     fur: "#9e9e9e",
     eyes: "#2e7d32",
     anchors: {
@@ -538,6 +560,8 @@ const CHARACTERS = {
 
   dog2: {
     name: "Spot",
+    neckY: 254,
+    headY: 206,
     fur: "#f5f5f5",
     anchors: {
       hats:    { x: 160, y: 70,  scale: 1.1 },
@@ -579,6 +603,8 @@ const CHARACTERS = {
 
   bunny: {
     name: "Marshmallow",
+    neckY: 256,
+    headY: 212,
     fur: "#f7f3ee",
     anchors: {
       hats:    { x: 160, y: 54,  scale: 1.05 },
@@ -619,6 +645,8 @@ const CHARACTERS = {
 
   bear: {
     name: "Waffles",
+    neckY: 256,
+    headY: 210,
     fur: "#8d6e63",
     anchors: {
       hats:    { x: 160, y: 66,  scale: 1.15 },
@@ -654,6 +682,8 @@ const CHARACTERS = {
 
   elephant: {
     name: "Peanut",
+    neckY: 250,
+    headY: 206,
     fur: "#90a4ae",
     anchors: {
       hats:    { x: 160, y: 62,  scale: 1.15 },
@@ -695,6 +725,8 @@ const CHARACTERS = {
 
   lizard: {
     name: "Ziggy",
+    neckY: 245,
+    headY: 212,
     fur: "#7cb342",
     anchors: {
       hats:    { x: 160, y: 78,  scale: 1.0 },
@@ -735,6 +767,8 @@ const CHARACTERS = {
 
   fish: {
     name: "Bubbles",
+    neckY: 300,
+    headY: 300,
     fur: "#29b6f6",
     anchors: {
       hats:    { x: 160, y: 116, scale: 1.1 },
@@ -774,6 +808,8 @@ const CHARACTERS = {
 
   parrot: {
     name: "Mango",
+    neckY: 232,
+    headY: 210,
     fur: "#e53935",
     anchors: {
       hats:    { x: 160, y: 72,  scale: 1.0 },

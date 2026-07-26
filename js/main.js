@@ -34,6 +34,12 @@
     photoEmoji: true,
     // stage background id from BACKGROUNDS ("none" = plain / transparent photo)
     background: "none",
+    // falling weather over the scene
+    weather: "none",
+    // id of the character lending their head, or null
+    swapHead: null,
+    // what the character is saying, when the player typed it themselves
+    customLine: "",
     // custom character names, persisted in localStorage
     names: loadNames()
   };
@@ -262,6 +268,7 @@
   const stage = document.getElementById("stage");
   const charSvg = document.getElementById("char-svg");
   const bubble = document.getElementById("bubble");
+  let dancing = false;
   const tabsEl = document.getElementById("tabs");
   const gridEl = document.getElementById("item-grid");
   const listEl = document.getElementById("character-list");
@@ -315,6 +322,65 @@
     return { x: 160, y: 260, scale: 1 };
   }
 
+  /* ---------------- weather ---------------- */
+
+  const WEATHERS = [
+    { id: "none",    emoji: "⛅", name: "Clear" },
+    { id: "rain",    emoji: "🌧️", name: "Rain" },
+    { id: "snow",    emoji: "❄️", name: "Snow" },
+    { id: "bubbles", emoji: "🫧", name: "Bubbles" },
+    { id: "confetti", emoji: "🎊", name: "Confetti" }
+  ];
+
+  /* stable pseudo-random so particles don't jump around on every re-render */
+  const scatter = (n, seed) => {
+    const out = [];
+    let v = seed;
+    for (let i = 0; i < n; i++) {
+      v = (v * 1103515245 + 12345) % 2147483648;
+      out.push(v / 2147483648);
+    }
+    return out;
+  };
+
+  const CONFETTI_COLORS = ["#ff6fb5", "#ffe921", "#3ecf5a", "#3aa0ff", "#9b59ff", "#ff8a3d"];
+
+  function weatherSvg() {
+    const w = state.weather;
+    if (w === "none") return "";
+    const r = scatter(90, 7);
+    let out = "";
+
+    if (w === "rain") {
+      for (let i = 0; i < 26; i++) {
+        const x = r[i] * 320, delay = -(r[i + 30] * 1.05).toFixed(2);
+        out += `<line class="wx-drop" x1="${x.toFixed(0)}" y1="-20" x2="${(x - 4).toFixed(0)}" y2="-4" style="animation-delay:${delay}s"/>`;
+      }
+      // puddles for anyone sensible enough to wear rain boots
+      if (["rainyellow", "rainpink", "rainblue"].includes(state.worn.shoes)) {
+        out += `<ellipse class="wx-puddle" cx="120" cy="486" rx="34" ry="8"/>`;
+        out += `<ellipse class="wx-puddle" cx="206" cy="498" rx="26" ry="6" style="animation-delay:-1s"/>`;
+      }
+    } else if (w === "snow") {
+      for (let i = 0; i < 30; i++) {
+        const x = r[i] * 320, rad = 2 + r[i + 60] * 3;
+        out += `<circle class="wx-flake" cx="${x.toFixed(0)}" cy="-10" r="${rad.toFixed(1)}" style="animation-delay:${-(r[i + 30] * 6).toFixed(2)}s"/>`;
+      }
+    } else if (w === "bubbles") {
+      for (let i = 0; i < 22; i++) {
+        const x = r[i] * 320, rad = 3 + r[i + 60] * 7;
+        out += `<circle class="wx-bubble" cx="${x.toFixed(0)}" cy="540" r="${rad.toFixed(1)}" style="animation-delay:${-(r[i + 30] * 6).toFixed(2)}s"/>`;
+      }
+    } else if (w === "confetti") {
+      for (let i = 0; i < 28; i++) {
+        const x = r[i] * 320;
+        const col = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+        out += `<rect class="wx-confetti" x="${x.toFixed(0)}" y="-14" width="9" height="5" rx="2" fill="${col}" style="animation-delay:${-(r[i + 60] * 3.2).toFixed(2)}s"/>`;
+      }
+    }
+    return `<g class="weather">${out}</g>`;
+  }
+
   function renderCharacter() {
     const char = CHARACTERS[state.characterId];
     const bg = BACKGROUNDS.find((b) => b.id === state.background);
@@ -331,6 +397,26 @@
     if (state.worn.shoes) {
       base = base.replace(/<g class="baseshoes">[\s\S]*?<\/g>/, "");
     }
+
+    /* head swap: keep the host below its chin line, and paste the donor's
+       head on top, shifted so the two necks line up */
+    const donorId = state.swapHead && CHARACTERS[state.swapHead] ? state.swapHead : null;
+    if (donorId && donorId !== state.characterId) {
+      const donor = CHARACTERS[donorId];
+      // keep the host from the torso down, keep the donor from the torso up,
+      // then line the two chins up so each body keeps its own proportions
+      const dy = char.headY - donor.headY;
+      base =
+        `<defs>
+           <clipPath id="hostBody"><rect x="-60" y="${char.neckY}" width="440" height="${640 - char.neckY}"/></clipPath>
+           <clipPath id="donorHead"><rect x="-60" y="-160" width="440" height="${donor.neckY + 160}"/></clipPath>
+         </defs>
+         <g clip-path="url(#hostBody)">${base}</g>
+         <g transform="translate(0 ${dy})">
+           <g clip-path="url(#donorHead)">${charArt(donorId)}</g>
+         </g>`;
+    }
+
     let out = `<g>${bg ? bg.svg : ""}</g><g>${base}</g>`;
     // draw order: bottoms under tops, beard over makeup, glasses over beard,
     // hair under the hat, held items in front of everything
@@ -344,7 +430,7 @@
                 ${itemArt(itemById(id))}
               </g>`;
     }
-    charSvg.innerHTML = out;
+    charSvg.innerHTML = out + weatherSvg();
   }
 
   function renderShelf() {
@@ -604,6 +690,33 @@
     }
   }
 
+  /* ---------------- weather picker ---------------- */
+
+  const weatherPickerEl = document.getElementById("weather-picker");
+
+  function renderWeatherPicker() {
+    weatherPickerEl.innerHTML = "<span class='picker-icon'>🌦️</span>";
+    for (const wx of WEATHERS) {
+      const btn = document.createElement("button");
+      btn.className = "bg-btn" + (wx.id === state.weather ? " selected" : "");
+      btn.textContent = wx.emoji;
+      btn.title = wx.name;
+      btn.addEventListener("click", () => {
+        state.weather = wx.id;
+        renderWeatherPicker();
+        renderCharacter();
+        playSound("on");
+        if (wx.id !== "none") {
+          say(wx.id === "rain" ? ["Splish splash!", "Where are my boots?"]
+            : wx.id === "snow" ? ["Brrr! Snow day!", "Let it snow!"]
+            : wx.id === "bubbles" ? ["Blub blub!", "Bubble party!"]
+            : ["HOORAY!", "Party time! 🎊"]);
+        }
+      });
+      weatherPickerEl.appendChild(btn);
+    }
+  }
+
   /* ---------------- renaming ---------------- */
 
   const nameTag = document.getElementById("name-tag");
@@ -660,23 +773,67 @@
 
   let bubbleTimer;
   function say(lines) {
+    if (state.customLine) return;   // don't talk over what the player wrote
     bubble.textContent = pick(lines);
     bubble.classList.remove("hidden");
     clearTimeout(bubbleTimer);
     bubbleTimer = setTimeout(() => bubble.classList.add("hidden"), 2200);
   }
 
+  /* the player can type their own line — it stays put and goes into photos */
+  function showCustomLine() {
+    clearTimeout(bubbleTimer);
+    if (state.customLine) {
+      bubble.textContent = state.customLine;
+      bubble.classList.remove("hidden");
+      bubble.classList.add("custom");
+    } else {
+      bubble.classList.add("hidden");
+      bubble.classList.remove("custom");
+    }
+  }
+
+  function editLine() {
+    if (bubble.querySelector("input")) return;
+    clearTimeout(bubbleTimer);
+    const input = document.createElement("input");
+    input.id = "bubble-input";
+    input.maxLength = 40;
+    input.placeholder = "Say something...";
+    input.value = state.customLine;
+    bubble.textContent = "";
+    bubble.classList.remove("hidden");
+    bubble.appendChild(input);
+    input.focus();
+    input.select();
+
+    const done = () => {
+      state.customLine = input.value.trim();
+      showCustomLine();
+      if (state.customLine) { bounce(); playSound("on"); }
+    };
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") input.blur();
+      if (e.key === "Escape") { input.value = state.customLine; input.blur(); }
+    });
+    input.addEventListener("blur", done);
+  }
+
+  bubble.addEventListener("click", editLine);
+  document.getElementById("talk-btn").addEventListener("click", editLine);
+
   function bounce() {
+    if (dancing) return;            // the dance already has the floor
     charSvg.classList.remove("bounce");
     void charSvg.offsetWidth; // restart the animation
     charSvg.classList.add("bounce");
   }
 
-  /* tiny cartoon sounds, no audio files needed */
-  let audioCtx;
+  /* tiny cartoon sounds, no audio files needed (shares the Jukebox context) */
   function playSound(kind) {
     try {
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const audioCtx = Jukebox.context();
+      if (audioCtx.state === "suspended") audioCtx.resume();
       const t = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -809,6 +966,70 @@
     photoOptsEl.appendChild(emojiBtn);
   }
 
+  /* speech bubble for saved photos: wraps the text, sizes the bubble to fit,
+     and points a little tail down at the character */
+  function drawSpeechBubble(ctx, text, W) {
+    const font = "bold 34px 'Comic Sans MS', 'Chalkboard SE', cursive";
+    ctx.font = font;
+    ctx.textAlign = "center";
+
+    const maxWidth = W - 140;
+    const words = text.split(/\s+/);
+    const lines = [];
+    let line = "";
+    for (const word of words) {
+      const attempt = line ? line + " " + word : word;
+      if (ctx.measureText(attempt).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = attempt;
+      }
+    }
+    if (line) lines.push(line);
+
+    const lh = 42;
+    const textW = Math.max(...lines.map((l) => ctx.measureText(l).width));
+    const bw = Math.min(W - 40, textW + 60);
+    const bh = lines.length * lh + 34;
+    const bx = (W - bw) / 2, by = 26, rad = 26;
+
+    ctx.beginPath();
+    ctx.moveTo(bx + rad, by);
+    ctx.arcTo(bx + bw, by, bx + bw, by + bh, rad);
+    ctx.arcTo(bx + bw, by + bh, bx, by + bh, rad);
+    ctx.arcTo(bx, by + bh, bx, by, rad);
+    ctx.arcTo(bx, by, bx + bw, by, rad);
+    ctx.closePath();
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = "#4a3728";
+    ctx.stroke();
+
+    // tail
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 20, by + bh - 3);
+    ctx.lineTo(W / 2, by + bh + 34);
+    ctx.lineTo(W / 2 + 20, by + bh - 3);
+    ctx.closePath();
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.strokeStyle = "#4a3728";
+    ctx.lineWidth = 6;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 17, by + bh - 4);
+    ctx.lineTo(W / 2 + 17, by + bh - 4);
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 8;
+    ctx.stroke();
+
+    ctx.fillStyle = "#4a3728";
+    ctx.font = font;
+    lines.forEach((l, i) => ctx.fillText(l, W / 2, by + 44 + i * lh));
+  }
+
   /* photo booth: render the stage SVG (background included) to a canvas.
      With a background → JPG; with "none" → transparent PNG. */
   document.getElementById("photo-btn").addEventListener("click", () => {
@@ -821,6 +1042,21 @@
     svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svgEl.setAttribute("width", W);
     svgEl.setAttribute("height", H);
+
+    // the weather particles get their look and motion from the stylesheet,
+    // which does not travel with an exported SVG — bake both in
+    const live = charSvg.querySelectorAll(".weather > *");
+    const copies = svgEl.querySelectorAll(".weather > *");
+    live.forEach((el, i) => {
+      const copy = copies[i];
+      if (!copy) return;
+      const cs = getComputedStyle(el);
+      if (cs.transform && cs.transform !== "none") copy.setAttribute("transform", cs.transform);
+      for (const prop of ["fill", "stroke", "stroke-width", "stroke-linecap", "opacity"]) {
+        const v = cs.getPropertyValue(prop);
+        if (v) copy.setAttribute(prop, v);
+      }
+    });
     const defs = document.querySelector("#shared-defs defs");
     if (defs) svgEl.insertBefore(defs.cloneNode(true), svgEl.firstChild);
 
@@ -843,6 +1079,9 @@
       }
 
       ctx.drawImage(img, 0, 0, W, H); // scene background comes from the SVG
+
+      // the line the player typed, drawn as a speech bubble at the top
+      if (state.customLine) drawSpeechBubble(ctx, state.customLine, W);
 
       // name plate at the bottom, in the chosen color (outlined so it reads
       // on any backdrop), with optional stars
@@ -881,6 +1120,71 @@
     say(["Squeaky clean!", "Fresh start!"]);
   });
 
+  /* ---------------- dance & head swap ---------------- */
+
+  const danceBtn = document.getElementById("dance-btn");
+  const swapBtn = document.getElementById("swap-btn");
+  const unswapBtn = document.getElementById("unswap-btn");
+
+  danceBtn.addEventListener("click", () => {
+    dancing = !dancing;
+    charSvg.classList.toggle("dancing", dancing);
+    charSvg.classList.remove("bounce");
+    danceBtn.classList.toggle("off", !dancing);
+    danceBtn.textContent = dancing ? "🛑 Stop" : "💃 Dance!";
+    if (dancing) {
+      if (!Jukebox.isOn()) { Jukebox.toggle(); renderMusicBtn(); }  // music for the dancer
+      playSound("on");
+      say(["🎵 Boogie time!", "Watch my moves!", "Shake it!", "Dance party!!"]);
+    }
+  });
+
+  function renderSwapButtons() {
+    unswapBtn.classList.toggle("hidden", !state.swapHead);
+    swapBtn.textContent = state.swapHead ? "🔀 Another!" : "🔀 Head Swap";
+  }
+
+  swapBtn.addEventListener("click", () => {
+    const others = Object.keys(CHARACTERS).filter(
+      (id) => id !== state.characterId && id !== state.swapHead
+    );
+    if (!others.length) return;
+    state.swapHead = pick(others);
+    renderSwapButtons();
+    renderCharacter();
+    bounce();
+    playSound("on");
+    say([`Whose head is this?!`, `I'm a ${getName(state.swapHead)} now!`,
+         "This feels weird...", "Hahaha! Look at me!"]);
+  });
+
+  unswapBtn.addEventListener("click", () => {
+    state.swapHead = null;
+    renderSwapButtons();
+    renderCharacter();
+    playSound("off");
+    say(["Phew, my own head!", "That's better."]);
+  });
+
+  /* ---------------- music ---------------- */
+
+  const musicBtn = document.getElementById("music-btn");
+
+  function renderMusicBtn() {
+    const playing = Jukebox.isOn();
+    musicBtn.textContent = playing ? "🎵" : "🔇";
+    musicBtn.classList.toggle("off", !playing);
+    musicBtn.title = playing ? "Music on — click for quiet" : "Music off — click to play";
+  }
+
+  Jukebox.init();
+  renderMusicBtn();
+  musicBtn.addEventListener("click", () => {
+    const playing = Jukebox.toggle();
+    renderMusicBtn();
+    say(playing ? ["🎵 La la la!", "Dance party!"] : ["Shhh...", "Quiet time."]);
+  });
+
   /* ---------------- photo studio ---------------- */
 
   PhotoStudio.init();
@@ -914,5 +1218,7 @@
   renderSkinPicker();
   renderEyePicker();
   renderFacePicker();
+  renderWeatherPicker();
+  renderSwapButtons();
   renderPhotoOpts();
 })();

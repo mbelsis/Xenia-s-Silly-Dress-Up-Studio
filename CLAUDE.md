@@ -97,14 +97,32 @@ The core idea that makes one wardrobe fit every character:
 - **Drag & drop** uses Pointer Events with `setPointerCapture` on the item
   grid (one code path for mouse and touch — required for the iPad target).
   A drop anywhere on the stage equips the item into its category's slot.
-- Sounds are synthesized with the Web Audio API; there are no asset files of
-  any kind — all art is inline SVG strings.
+- Sounds are synthesized with the Web Audio API; the only asset files are the
+  app icons — all art is inline SVG strings.
+- **Music** (`js/music.js`): `Jukebox` owns the single shared `AudioContext`
+  (`Jukebox.context()` — `playSound()` in main.js uses it too, since Safari
+  caps the number of contexts). The tune is scheduled ahead with a 25 ms
+  lookahead timer; no audio files. Preference persists under `dressup-music`.
+- **Installable app**: `manifest.webmanifest` + `sw.js` + `icons/`. The service
+  worker is network-first with a 2.5 s timeout and cache fallback, so updates
+  appear immediately when online and the game still opens offline. Bump
+  `CACHE` in sw.js when the file list changes. See INSTALL.md.
 - **Combo quips**: `COMBO_QUIPS` in `main.js` is keyed `"itemId:characterId"`
   and takes priority over per-item and generic quips — used for
   animal-specific jokes (cat + fish bowl, dog + bone collar, …).
+- **Head swap**: each character declares `headY` (bottom of the head) and
+  `neckY` (top of the torso). The host is clipped below `neckY`, the donor
+  above its own `neckY`, and the donor is shifted so the two `headY` lines
+  meet. Note the animals are drawn with heads floating above their bodies —
+  that gap is the existing art style, not a swap artifact.
+- **Weather** particles are SVG elements animated by CSS classes
+  (`.wx-drop` etc.). Because an exported SVG carries no stylesheet, the photo
+  export bakes each particle's computed transform *and* paint properties onto
+  the clone — do the same for any new CSS-styled stage element.
 - **Photo booth**: the Photo button clones the stage SVG (background scene
   included), injects the shared defs from `#shared-defs` (so gradient hair
-  renders), rasterizes via blob-URL → Image → canvas, and downloads a file
+  renders), draws the typed speech bubble on the canvas, rasterizes via
+  blob-URL → Image → canvas, and downloads a file
   named after the character — JPG when a scene is selected, transparent PNG
   when the background is "none".
 

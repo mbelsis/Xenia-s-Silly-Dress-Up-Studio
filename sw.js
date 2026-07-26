@@ -1,7 +1,7 @@
 /* Service worker: keeps the game playable with no internet once it has been
    opened. Bump CACHE when files change — old caches are cleaned on activate. */
 
-const CACHE = "dressup-v1";
+const CACHE = "dressup-v2";
 
 const SHELL = [
   "./",
@@ -31,22 +31,30 @@ self.addEventListener("activate", (e) => {
   );
 });
 
-/* Serve from cache for instant offline starts, and refresh the copy in the
-   background so the next launch picks up any changes. */
+/* Fresh-first: use the network when it answers quickly (so updates to the game
+   show up immediately), fall back to the cached copy when it is slow or the
+   device is offline. The whole game is ~200 KB, so this stays snappy. */
+const NET_TIMEOUT = 2500;
+
 self.addEventListener("fetch", (e) => {
-  if (e.request.method !== "GET") return;
-  e.respondWith(
-    caches.match(e.request).then((hit) => {
-      const live = fetch(e.request)
-        .then((res) => {
-          if (res && res.status === 200 && res.type === "basic") {
-            const copy = res.clone();
-            caches.open(CACHE).then((c) => c.put(e.request, copy));
-          }
-          return res;
-        })
-        .catch(() => hit);
-      return hit || live;
-    })
-  );
+  if (e.request.method !== "GET" || !e.request.url.startsWith(self.location.origin)) return;
+
+  e.respondWith((async () => {
+    const cached = await caches.match(e.request);
+
+    const network = fetch(e.request).then((res) => {
+      if (res && res.status === 200 && res.type === "basic") {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(e.request, copy));
+      }
+      return res;
+    });
+
+    if (!cached) return network;
+
+    // whichever is ready first, but never wait long for a dead network
+    const timeout = new Promise((resolve) => setTimeout(() => resolve(null), NET_TIMEOUT));
+    const winner = await Promise.race([network.catch(() => null), timeout]);
+    return winner || cached;
+  })());
 });

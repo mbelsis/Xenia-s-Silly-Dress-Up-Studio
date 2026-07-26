@@ -59,6 +59,51 @@ body {
 }
 .big-btn.secondary { background: var(--teal); }
 .big-btn.photo { background: var(--purple); }
+.big-btn.music { background: #f06292; padding: 10px 16px; }
+.big-btn.music.off { background: #bcaa99; }
+.big-btn.dance { background: #ec407a; }
+.big-btn.dance.off { background: #ec407a; }
+.big-btn.talk { background: #26a69a; }
+.big-btn.swap { background: #7e57c2; }
+
+/* ---------- dancing ---------- */
+/* one cycle = two beats at the Jukebox's 112bpm, so it moves with the music */
+#char-svg.dancing { animation: boogie 1.071s ease-in-out infinite; }
+@keyframes boogie {
+  0%   { transform: translateY(0) rotate(0deg) scale(1, 1); }
+  15%  { transform: translateY(-14px) rotate(-5deg) scale(0.97, 1.04); }
+  30%  { transform: translateY(0) rotate(0deg) scale(1.04, 0.95); }
+  50%  { transform: translateY(-10px) rotate(5deg) scale(0.98, 1.03); }
+  70%  { transform: translateY(0) rotate(0deg) scale(1.05, 0.94); }
+  85%  { transform: translateY(-8px) rotate(-3deg) scale(0.99, 1.02); }
+  100% { transform: translateY(0) rotate(0deg) scale(1, 1); }
+}
+
+/* ---------- weather ---------- */
+#char-svg .wx-drop {
+  stroke: #7ec8e3;
+  stroke-width: 3;
+  stroke-linecap: round;
+  animation: wx-fall 1.05s linear infinite;
+}
+#char-svg .wx-flake {
+  fill: #ffffff;
+  animation: wx-drift 6s linear infinite;
+}
+#char-svg .wx-bubble {
+  fill: none;
+  stroke: #b3e5fc;
+  stroke-width: 2.5;
+  animation: wx-rise 6s linear infinite;
+}
+#char-svg .wx-confetti { animation: wx-tumble 3.2s linear infinite; }
+#char-svg .wx-puddle { fill: #7ec8e3; opacity: 0.55; animation: wx-splash 2s ease-in-out infinite; }
+
+@keyframes wx-fall   { from { transform: translateY(0); } to { transform: translateY(545px); } }
+@keyframes wx-drift  { from { transform: translate(0, 0); } 50% { transform: translate(18px, 270px); } to { transform: translate(0, 540px); } }
+@keyframes wx-rise   { from { transform: translateY(0); opacity: 0; } 12% { opacity: 1; } 90% { opacity: 0.9; } to { transform: translateY(-570px); opacity: 0; } }
+@keyframes wx-tumble { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(545px) rotate(540deg); } }
+@keyframes wx-splash { 0%, 100% { transform: scaleX(1); opacity: 0.5; } 50% { transform: scaleX(1.12); opacity: 0.7; } }
 .big-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
 
 /* ---------- layout ---------- */
@@ -396,6 +441,21 @@ aside h2 {
   text-align: center;
   animation: pop-in 0.25s ease;
 }
+#bubble { cursor: pointer; }
+#bubble.custom { border-color: var(--purple); }
+#bubble-input {
+  font-family: inherit;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  text-align: center;
+  width: 15ch;
+  max-width: 60vw;
+  background: transparent;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
 #bubble::after {
   content: "";
   position: absolute;

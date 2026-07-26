@@ -77,6 +77,8 @@ const PhotoStudio = (function () {
       name: entry.name,
       skin: entry.skin || "#f2c49b",
       photo: entry.dataUrl,
+      neckY: 196,
+      headY: 178,
       anchors: ANCHORS,
       svg: BODY
     };

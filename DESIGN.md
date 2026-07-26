@@ -60,6 +60,23 @@ sound effects play.
   plate). With a scene it saves a JPG; with no background it saves a
   transparent PNG.
 - **Reset button** — undresses the character back to basics.
+- **💃 Dance button** — the character boogies in time with the music (one cycle
+  = two beats at the Jukebox tempo). Starts the music if it was off.
+- **💬 Say... button** — type what the character says. The typed line stays in
+  the speech bubble instead of fading, suppresses the automatic quips, and is
+  drawn into saved photos as a proper speech bubble.
+- **🔀 Head Swap** — puts another character's head on this body: the host is
+  kept from the torso down, the donor from the torso up, and the two chins are
+  lined up (`headY`/`neckY` per character). Press again for a new head, ↩️ to
+  give it back.
+- **🌦️ Weather picker** — rain (with puddles if rain boots are on), snow,
+  rising bubbles, or confetti drifting over the scene. Animated with CSS and
+  baked into photos at the moment the picture is taken.
+- **🎵 Music button** — toggles the background music (on by default, choice
+  remembered). The tune is generated live: a C–G–Am–F progression with a
+  melody that random-walks a pentatonic scale, so it stays in tune and never
+  repeats exactly. It starts on the first tap (browser rule) and hushes when
+  the game is in the background.
 
 ### 3.3 Slots (where items snap)
 | Cabinet drawer | Snaps to |
