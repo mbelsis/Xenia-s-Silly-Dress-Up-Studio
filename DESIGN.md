@@ -49,8 +49,8 @@ sound effects play.
   hide the base trousers (revealing bare legs), shoes hide the base
   shoes/paws. No double-clothing anywhere.
 - **Background picker** — a row of buttons under the character: no background,
-  Party, Beach, Space, Meadow, Playground Park, Poster Wall, Under the Sea,
-  Theater Stage.
+  Party, Beach, Space, Meadow, Playground Park, Kitchen, Poster Wall, Under
+  the Sea, Theater Stage.
 - **Fur color picker** — animals get a 🐾 swatch row (in place of the human
   skin-tone row): brown, dark brown, black, gray, white, orange, golden, plus
   pink and blue. Accent colors (ears, spots, stripes) stay, so a recolored
@@ -129,6 +129,14 @@ One item per slot; dropping a new hat replaces the old hat.
 | **Ziggy** | A grinning lizard with bulgy eyes and a curly tail |
 | **Bubbles** | A fish who stands on its tail fin — shoes on a fish are peak comedy |
 | **Mango** | A parrot with rainbow tail feathers |
+| **Pip** | A toddler with a big head, one curl and a onesie |
+| **Nia** | A girl with a huge curly afro |
+| **Ravi** | A teen with an undercut and a topknot |
+| **Elena** | A woman with a neat bun and glasses |
+| **Moolissa** | A cow with patches and little horns |
+| **Biscuit Jr.** | A horse with a flowing mane |
+| **Truffle** | A pig with a curly tail and a snout |
+| **Hopscotch** | A frog with bulging eyes and webbed feet |
 
 **📷 Add Your Own** — the shelf has a button to build a character from a
 photo: pick a picture, drag/zoom to frame the face, slide **Photo ↔ Drawing**
@@ -150,7 +158,8 @@ grandma, a robot.
 
 - **Hats**: Propeller Beanie, Wizard Hat, Pirate Hat, Rubber Duck, Banana Peel,
   Fish Bowl, Carrot Top, Honey Pot, Royal Crown, Party Hat, Chef Hat, Sombrero,
-  Baseball Cap, Sport Visor, Bucket Hat, Floppy Sun Hat
+  Baseball Cap, Sport Visor, Bucket Hat, Floppy Sun Hat, Clown Hair, Space
+  Helmet, Pilot Cap, Police Cap, Fire Helmet
 - **Hair**: Spiky Punk, Mega Afro, Princess Waves, Mighty Mohawk, Bouncy
   Pigtails, Swoosh Quiff, Short Bob, Long & Straight, Super-Long Locks, Curly
   Cascade, Mega Curls — each in 9 colors including rainbow
@@ -168,7 +177,8 @@ grandma, a robot.
   Shirt, Royal Robe
 - **Stamps** (chest logos drawn over the top): Gold Star, Big Heart,
   Lightning Bolt, Smiley, Soccer Ball, Electric Guitar, Rockin' Drum, Music
-  Notes, ROCK! Stamp, Robot Buddy, Pizza Slice, Mini Rainbow
+  Notes, ROCK! Stamp, Robot Buddy, Pizza Slice, Tiny Dino, Cupcake, Peace
+  Sign, Cat Face, Flying Saucer, Little Crown, Mini Rainbow
 - **Bottoms** (worn together with a top!): Beach Shorts, Basketball Shorts,
   Running Shorts, Soccer Shorts, Blue Jeans, Ripped Jeans, Jean Shorts, Smart
   Trousers, Tracksuit Pants, Pajama Pants, Fancy Pants, Grass Skirt, Denim
@@ -183,7 +193,8 @@ grandma, a robot.
   on the wrist), Bone Collar, Fish Skeleton, Peanut Garland
 - **Makeup**: Rosy Cheeks, Clown Nose, Star Face Paint, Curly Mustache,
   Snorkel Mask, Kitty Whiskers, Lipstick, Freckles, Sparkle Glitter, Blue Eye
-  Shadow, Game-Day Stripes
+  Shadow, Game-Day Stripes, Butterfly Paint, Superhero Mask, Vampire Fangs,
+  Brave Band-Aid, Mighty Unibrow, Beauty Mark
 - **Hair additions**: Sleek Side Part, Straight with Bangs (long straight
   styles)
 

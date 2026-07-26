@@ -174,6 +174,58 @@ const BACKGROUNDS = [
   },
 
   {
+    id: "kitchen", name: "Kitchen", emoji: "🍳",
+    svg: `
+      <rect width="320" height="520" fill="#fff3e0"/>
+      <!-- tiled splashback -->
+      <g stroke="#f0d9bd" stroke-width="3">
+        <path d="M0 60 H320 M0 100 H320 M0 140 H320"/>
+        <path d="M40 60 V140 M120 60 V140 M200 60 V140 M280 60 V140"/>
+      </g>
+      <!-- window with a sunny view -->
+      <rect x="26" y="22" width="104" height="86" rx="6" fill="#bfe3ff" stroke="#c8a97e" stroke-width="6"/>
+      <circle cx="60" cy="50" r="13" fill="#ffd54f"/>
+      <path d="M26 88 q26 -18 52 -4 q26 14 52 -2 v26 h-104 Z" fill="#9ed36a"/>
+      <path d="M78 22 V108 M26 65 H130" stroke="#c8a97e" stroke-width="5"/>
+      <!-- wall cupboards -->
+      <rect x="176" y="26" width="120" height="76" rx="5" fill="#e0a97b" stroke="#c8895a" stroke-width="4"/>
+      <path d="M236 26 V102" stroke="#c8895a" stroke-width="4"/>
+      <circle cx="228" cy="66" r="4" fill="#7a5230"/>
+      <circle cx="244" cy="66" r="4" fill="#7a5230"/>
+      <!-- shelf with jars -->
+      <rect x="16" y="150" width="130" height="7" rx="3" fill="#c8a97e"/>
+      <rect x="28" y="122" width="24" height="28" rx="4" fill="#ffd9a0" stroke="#e0a97b" stroke-width="2"/>
+      <rect x="62" y="128" width="22" height="22" rx="4" fill="#c8e6c9" stroke="#a5d6a7" stroke-width="2"/>
+      <rect x="96" y="118" width="26" height="32" rx="4" fill="#ffcdd2" stroke="#ef9a9a" stroke-width="2"/>
+      <!-- counter -->
+      <rect y="360" width="320" height="26" fill="#d7b28c"/>
+      <rect y="386" width="320" height="70" fill="#e8c39e"/>
+      <g stroke="#d0a479" stroke-width="4">
+        <path d="M80 386 V456 M160 386 V456 M240 386 V456"/>
+      </g>
+      <g fill="#8d6e63">
+        <circle cx="60" cy="410" r="4"/><circle cx="100" cy="410" r="4"/>
+        <circle cx="140" cy="410" r="4"/><circle cx="180" cy="410" r="4"/>
+        <circle cx="220" cy="410" r="4"/><circle cx="260" cy="410" r="4"/>
+      </g>
+      <!-- pot on the counter, steaming -->
+      <rect x="228" y="326" width="56" height="34" rx="6" fill="#90a4ae"/>
+      <rect x="222" y="318" width="68" height="10" rx="5" fill="#78909c"/>
+      <rect x="250" y="306" width="12" height="10" rx="4" fill="#546e7a"/>
+      <path d="M240 300 q8 -14 0 -26 M262 300 q8 -14 0 -26" stroke="#ffffff" stroke-width="4" fill="none" opacity="0.8" stroke-linecap="round"/>
+      <!-- mixing bowl -->
+      <path d="M34 336 h54 q-4 24 -27 24 q-23 0 -27 -24 Z" fill="#ffffff" stroke="#e0e0e0" stroke-width="3"/>
+      <path d="M44 336 q17 -10 34 0" stroke="#ffe0b2" stroke-width="6" fill="none"/>
+      <!-- floor -->
+      <rect y="456" width="320" height="64" fill="#c9a227"/>
+      <g stroke="#b08f1e" stroke-width="3">
+        <path d="M0 480 H320 M0 502 H320"/>
+        <path d="M40 456 V520 M120 456 V520 M200 456 V520 M280 456 V520"/>
+      </g>
+    `
+  },
+
+  {
     id: "posters", name: "Poster Wall", emoji: "🖼️",
     svg: `
       <rect width="320" height="520" fill="#b39ddb"/>

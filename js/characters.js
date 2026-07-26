@@ -516,6 +516,179 @@ const CHARACTERS = {
     `
   },
 
+  pip: {
+    name: "Pip",
+    skin: "#f7d0ae",
+    neckY: 205,
+    headY: 193,
+    anchors: {
+      hats:    { x: 160, y: 56,  scale: 1.05 },
+      hair:    { x: 160, y: 64,  scale: 1.05 },
+      makeup:  { x: 160, y: 128, scale: 1.05 },
+      jewelry: { x: 160, y: 205, scale: 0.95 },
+      clothes: { x: 160, y: 282, scale: 0.95 },
+      shoes:   { x: 160, y: 440, scale: 0.95 }
+    },
+    svg: `
+      <!-- stubby legs -->
+      <rect x="134" y="348" width="24" height="84" rx="12" fill="SKINC"/>
+      <rect x="162" y="348" width="24" height="84" rx="12" fill="SKINC"/>
+      <g class="baseshoes">
+        <ellipse cx="142" cy="440" rx="24" ry="12" fill="#ef9a9a"/>
+        <ellipse cx="178" cy="440" rx="24" ry="12" fill="#ef9a9a"/>
+      </g>
+      <!-- arms -->
+      <rect x="96"  y="222" width="22" height="92" rx="11" fill="SKINC" transform="rotate(16 107 222)"/>
+      <rect x="202" y="222" width="22" height="92" rx="11" fill="SKINC" transform="rotate(-16 213 222)"/>
+      <!-- onesie -->
+      <g class="baseshirt">
+        <path d="M118 214 Q160 196 202 214 L212 330 Q160 352 108 330 Z" fill="#a5d6f7"/>
+        <circle cx="160" cy="252" r="5" fill="#7fb3e0"/>
+        <circle cx="160" cy="286" r="5" fill="#7fb3e0"/>
+      </g>
+      <!-- big toddler head -->
+      <circle cx="160" cy="125" r="68" fill="SKINC"/>
+      <path d="M152 60 q8 -24 24 -12 q-13 2 -13 15" stroke="#8d6e63" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <circle cx="136" cy="122" r="8" fill="EYEC"/>
+      <circle cx="184" cy="122" r="8" fill="EYEC"/>
+      <circle cx="139" cy="118" r="3" fill="#fff"/>
+      <circle cx="187" cy="118" r="3" fill="#fff"/>
+      <ellipse cx="116" cy="146" rx="12" ry="8" fill="#f7b2a0" opacity="0.85"/>
+      <ellipse cx="204" cy="146" rx="12" ry="8" fill="#f7b2a0" opacity="0.85"/>
+      <g transform="translate(160 158) scale(0.9)">MOUTHC</g>
+    `
+  },
+
+  nia: {
+    name: "Nia",
+    skin: "#8d5524",
+    neckY: 196,
+    headY: 178,
+    anchors: {
+      hats:    { x: 160, y: 46,  scale: 1.0 },
+      hair:    { x: 160, y: 58,  scale: 1.0 },
+      makeup:  { x: 160, y: 122, scale: 1.0 },
+      jewelry: { x: 160, y: 196, scale: 1.0 },
+      clothes: { x: 160, y: 288, scale: 1.0 },
+      shoes:   { x: 160, y: 458, scale: 1.0 }
+    },
+    svg: `
+      <rect x="132" y="350" width="22" height="100" rx="11" fill="SKINC"/>
+      <rect x="166" y="350" width="22" height="100" rx="11" fill="SKINC"/>
+      <g class="baseshoes">
+        <ellipse cx="140" cy="458" rx="24" ry="12" fill="#ffb300"/>
+        <ellipse cx="180" cy="458" rx="24" ry="12" fill="#ffb300"/>
+      </g>
+      <rect x="92"  y="212" width="20" height="110" rx="10" fill="SKINC" transform="rotate(14 102 212)"/>
+      <rect x="208" y="212" width="20" height="110" rx="10" fill="SKINC" transform="rotate(-14 218 212)"/>
+      <g class="baseshirt">
+        <path d="M115 210 Q160 190 205 210 L212 320 Q160 345 108 320 Z" fill="#ff7043"/>
+        <path d="M126 236 Q160 248 194 236" stroke="#e64a19" stroke-width="5" fill="none"/>
+      </g>
+      <!-- big curly hair -->
+      <g fill="#2b1b12">
+        <circle cx="160" cy="58" r="34"/><circle cx="116" cy="76" r="30"/><circle cx="204" cy="76" r="30"/>
+        <circle cx="98" cy="108" r="26"/><circle cx="222" cy="108" r="26"/>
+        <circle cx="132" cy="52" r="26"/><circle cx="188" cy="52" r="26"/>
+      </g>
+      <circle cx="160" cy="118" r="60" fill="SKINC"/>
+      <path d="M104 108 Q108 62 160 60 Q212 62 216 108 Q206 80 160 78 Q114 80 104 108 Z" fill="#2b1b12"/>
+      <circle cx="138" cy="115" r="7" fill="EYEC"/>
+      <circle cx="182" cy="115" r="7" fill="EYEC"/>
+      <circle cx="140" cy="112" r="2.5" fill="#fff"/>
+      <circle cx="184" cy="112" r="2.5" fill="#fff"/>
+      <path d="M124 100 q8 -6 16 -4 M180 96 q8 -2 16 4" stroke="#2b1b12" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <g transform="translate(160 151)">MOUTHC</g>
+    `
+  },
+
+  ravi: {
+    name: "Ravi",
+    skin: "#c68863",
+    neckY: 194,
+    headY: 176,
+    anchors: {
+      hats:    { x: 160, y: 50,  scale: 1.0 },
+      hair:    { x: 160, y: 58,  scale: 1.0 },
+      makeup:  { x: 160, y: 120, scale: 1.0 },
+      jewelry: { x: 160, y: 194, scale: 1.0 },
+      clothes: { x: 160, y: 286, scale: 1.0 },
+      shoes:   { x: 160, y: 458, scale: 1.0 }
+    },
+    svg: `
+      <rect x="130" y="348" width="24" height="102" rx="12" fill="SKINC"/>
+      <rect x="166" y="348" width="24" height="102" rx="12" fill="SKINC"/>
+      <g class="pants">
+        <rect x="130" y="340" width="24" height="90" rx="10" fill="#37474f"/>
+        <rect x="166" y="340" width="24" height="90" rx="10" fill="#37474f"/>
+      </g>
+      <g class="baseshoes">
+        <ellipse cx="140" cy="458" rx="25" ry="12" fill="#eceff1"/>
+        <ellipse cx="180" cy="458" rx="25" ry="12" fill="#eceff1"/>
+        <path d="M126 456 h20 M174 456 h20" stroke="#b0bec5" stroke-width="3"/>
+      </g>
+      <rect x="90"  y="210" width="21" height="112" rx="10" fill="SKINC" transform="rotate(14 100 210)"/>
+      <rect x="209" y="210" width="21" height="112" rx="10" fill="SKINC" transform="rotate(-14 219 210)"/>
+      <g class="baseshirt">
+        <path d="M112 206 Q160 188 208 206 L216 324 Q160 346 104 324 Z" fill="#5c6bc0"/>
+        <path d="M136 200 Q160 224 184 200" stroke="#3f51b5" stroke-width="5" fill="none"/>
+      </g>
+      <circle cx="160" cy="116" r="58" fill="SKINC"/>
+      <!-- undercut with a topknot -->
+      <circle cx="160" cy="44" r="15" fill="#1c1c1c"/>
+      <path d="M104 100 Q102 54 160 52 Q218 54 216 100 Q206 74 160 72 Q114 74 104 100 Z" fill="#1c1c1c"/>
+      <path d="M104 100 q10 8 20 4 M216 100 q-10 8 -20 4" stroke="#111" stroke-width="4" fill="none"/>
+      <path d="M128 98 h22 M170 98 h22" stroke="#1c1c1c" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="139" cy="114" r="6.5" fill="EYEC"/>
+      <circle cx="181" cy="114" r="6.5" fill="EYEC"/>
+      <circle cx="141" cy="111" r="2.5" fill="#fff"/>
+      <circle cx="183" cy="111" r="2.5" fill="#fff"/>
+      <g transform="translate(160 150)">MOUTHC</g>
+    `
+  },
+
+  elena: {
+    name: "Elena",
+    skin: "#e8b78a",
+    neckY: 190,
+    headY: 170,
+    anchors: {
+      hats:    { x: 160, y: 44,  scale: 1.0 },
+      hair:    { x: 160, y: 54,  scale: 1.0 },
+      makeup:  { x: 160, y: 116, scale: 1.0 },
+      jewelry: { x: 160, y: 192, scale: 1.0 },
+      clothes: { x: 160, y: 284, scale: 1.0 },
+      shoes:   { x: 160, y: 458, scale: 1.0 }
+    },
+    svg: `
+      <rect x="130" y="346" width="24" height="104" rx="12" fill="SKINC"/>
+      <rect x="166" y="346" width="24" height="104" rx="12" fill="SKINC"/>
+      <g class="baseshoes">
+        <ellipse cx="140" cy="458" rx="25" ry="12" fill="#455a64"/>
+        <ellipse cx="180" cy="458" rx="25" ry="12" fill="#455a64"/>
+      </g>
+      <rect x="90"  y="208" width="21" height="112" rx="10" fill="SKINC" transform="rotate(14 100 208)"/>
+      <rect x="209" y="208" width="21" height="112" rx="10" fill="SKINC" transform="rotate(-14 219 208)"/>
+      <g class="baseshirt">
+        <path d="M112 202 Q160 184 208 202 L218 330 Q160 350 102 330 Z" fill="#26a69a"/>
+        <path d="M138 196 L160 224 L182 196 L176 190 L160 210 L144 190 Z" fill="#00897b"/>
+      </g>
+      <circle cx="160" cy="112" r="58" fill="SKINC"/>
+      <!-- hair in a neat bun -->
+      <circle cx="160" cy="42" r="19" fill="#5d4037"/>
+      <path d="M102 104 Q100 48 160 46 Q220 48 218 104 Q208 72 160 70 Q112 72 102 104 Z" fill="#6d4c41"/>
+      <circle cx="103" cy="112" r="10" fill="#6d4c41"/>
+      <circle cx="217" cy="112" r="10" fill="#6d4c41"/>
+      <!-- glasses -->
+      <rect x="120" y="98" width="34" height="26" rx="8" fill="none" stroke="#37474f" stroke-width="4"/>
+      <rect x="166" y="98" width="34" height="26" rx="8" fill="none" stroke="#37474f" stroke-width="4"/>
+      <path d="M154 110 h12 M120 104 l-12 -4 M200 104 l12 -4" stroke="#37474f" stroke-width="4"/>
+      <circle cx="137" cy="111" r="6" fill="EYEC"/>
+      <circle cx="183" cy="111" r="6" fill="EYEC"/>
+      <g transform="translate(160 148)">MOUTHC</g>
+    `
+  },
+
   cat2: {
     name: "Mochi",
     neckY: 258,
@@ -847,6 +1020,176 @@ const CHARACTERS = {
       <path d="M144 190 Q160 200 176 190 Q170 208 160 208 Q150 208 144 190 Z" fill="#f57f17"/>
       <!-- head feathers -->
       <path d="M148 94 Q144 74 154 68 M160 92 Q160 70 168 66 M172 94 Q176 74 184 72" stroke="#c62828" stroke-width="6" fill="none" stroke-linecap="round"/>
+    `
+  },
+
+  cow: {
+    name: "Moolissa",
+    fur: "#f7f4ef",
+    neckY: 260,
+    headY: 210,
+    anchors: {
+      hats:    { x: 160, y: 68,  scale: 1.1 },
+      hair:    { x: 160, y: 78,  scale: 1.1 },
+      makeup:  { x: 160, y: 152, scale: 1.05 },
+      jewelry: { x: 160, y: 242, scale: 1.05 },
+      clothes: { x: 160, y: 332, scale: 1.05 },
+      shoes:   { x: 160, y: 458, scale: 1.0 }
+    },
+    svg: `
+      <path d="M238 396 Q286 372 276 322" stroke="#f7f4ef" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M272 316 q14 12 4 26 q-12 4 -14 -12 Z" fill="#33261d"/>
+      <g class="baseshoes">
+        <ellipse cx="132" cy="458" rx="26" ry="14" fill="#33261d"/>
+        <ellipse cx="188" cy="458" rx="26" ry="14" fill="#33261d"/>
+      </g>
+      <ellipse cx="160" cy="360" rx="88" ry="100" fill="#f7f4ef"/>
+      <!-- patches -->
+      <path d="M108 320 q26 -18 40 6 q-10 30 -38 22 q-14 -14 -2 -28 Z" fill="#33261d"/>
+      <path d="M198 396 q28 -14 34 12 q-14 26 -38 12 q-8 -14 4 -24 Z" fill="#33261d"/>
+      <ellipse cx="160" cy="404" rx="40" ry="46" fill="#ffd9e0"/>
+      <circle cx="146" cy="426" r="5" fill="#e59aa8"/>
+      <circle cx="174" cy="426" r="5" fill="#e59aa8"/>
+      <!-- ears -->
+      <ellipse cx="86" cy="150" rx="26" ry="16" fill="#f7f4ef" transform="rotate(-20 86 150)"/>
+      <ellipse cx="234" cy="150" rx="26" ry="16" fill="#f7f4ef" transform="rotate(20 234 150)"/>
+      <!-- horns -->
+      <path d="M112 96 q-16 -22 -2 -30 q10 6 12 24 Z" fill="#e8d9b8"/>
+      <path d="M208 96 q16 -22 2 -30 q-10 6 -12 24 Z" fill="#e8d9b8"/>
+      <circle cx="160" cy="148" r="62" fill="#f7f4ef"/>
+      <path d="M118 108 q22 -16 44 -2 q-18 20 -44 2 Z" fill="#33261d"/>
+      <circle cx="136" cy="140" r="8" fill="EYEC"/>
+      <circle cx="184" cy="140" r="8" fill="EYEC"/>
+      <circle cx="139" cy="136" r="3" fill="#fff"/>
+      <circle cx="187" cy="136" r="3" fill="#fff"/>
+      <!-- muzzle -->
+      <ellipse cx="160" cy="180" rx="42" ry="28" fill="#ffd9e0"/>
+      <ellipse cx="146" cy="174" rx="6" ry="8" fill="#e59aa8"/>
+      <ellipse cx="174" cy="174" rx="6" ry="8" fill="#e59aa8"/>
+      <path d="M138 192 Q160 204 182 192" stroke="#c98793" stroke-width="4" fill="none" stroke-linecap="round"/>
+    `
+  },
+
+  horse: {
+    name: "Biscuit Jr.",
+    fur: "#a1662f",
+    neckY: 258,
+    headY: 214,
+    anchors: {
+      hats:    { x: 160, y: 62,  scale: 1.05 },
+      hair:    { x: 160, y: 74,  scale: 1.05 },
+      makeup:  { x: 160, y: 156, scale: 1.0 },
+      jewelry: { x: 160, y: 242, scale: 1.05 },
+      clothes: { x: 160, y: 332, scale: 1.05 },
+      shoes:   { x: 160, y: 458, scale: 1.0 }
+    },
+    svg: `
+      <!-- tail -->
+      <path d="M240 350 q46 10 44 66 q-16 12 -26 -6 q6 -34 -22 -40 Z" fill="#5a3a1a"/>
+      <g class="baseshoes">
+        <ellipse cx="132" cy="458" rx="25" ry="14" fill="#4a3220"/>
+        <ellipse cx="188" cy="458" rx="25" ry="14" fill="#4a3220"/>
+      </g>
+      <ellipse cx="160" cy="358" rx="84" ry="100" fill="#a1662f"/>
+      <ellipse cx="160" cy="392" rx="48" ry="58" fill="#c98a4b"/>
+      <!-- ears -->
+      <path d="M124 92 q-6 -34 8 -36 q12 10 10 38 Z" fill="#a1662f"/>
+      <path d="M196 92 q6 -34 -8 -36 q-12 10 -10 38 Z" fill="#a1662f"/>
+      <path d="M128 92 q-2 -22 4 -26 q6 8 4 26 Z" fill="#e0a89a"/>
+      <path d="M192 92 q2 -22 -4 -26 q-6 8 -4 26 Z" fill="#e0a89a"/>
+      <!-- head + long muzzle -->
+      <ellipse cx="160" cy="140" rx="54" ry="60" fill="#a1662f"/>
+      <ellipse cx="160" cy="190" rx="38" ry="34" fill="#c98a4b"/>
+      <!-- mane -->
+      <path d="M160 82 q-38 6 -44 46 q-8 40 6 66 q-24 -34 -14 -76 Q118 76 160 74 Q202 76 212 118 q10 42 -14 76 q14 -26 6 -66 q-6 -40 -44 -46 Z" fill="#5a3a1a"/>
+      <circle cx="132" cy="136" r="8" fill="EYEC"/>
+      <circle cx="188" cy="136" r="8" fill="EYEC"/>
+      <circle cx="135" cy="132" r="3" fill="#fff"/>
+      <circle cx="191" cy="132" r="3" fill="#fff"/>
+      <ellipse cx="146" cy="186" rx="6" ry="8" fill="#8d5a2b"/>
+      <ellipse cx="174" cy="186" rx="6" ry="8" fill="#8d5a2b"/>
+      <path d="M142 206 Q160 216 178 206" stroke="#8d5a2b" stroke-width="4" fill="none" stroke-linecap="round"/>
+    `
+  },
+
+  pig: {
+    name: "Truffle",
+    fur: "#f7a8bd",
+    neckY: 258,
+    headY: 208,
+    anchors: {
+      hats:    { x: 160, y: 74,  scale: 1.1 },
+      hair:    { x: 160, y: 84,  scale: 1.1 },
+      makeup:  { x: 160, y: 152, scale: 1.05 },
+      jewelry: { x: 160, y: 242, scale: 1.05 },
+      clothes: { x: 160, y: 332, scale: 1.05 },
+      shoes:   { x: 160, y: 458, scale: 1.0 }
+    },
+    svg: `
+      <!-- curly tail -->
+      <path d="M240 372 q26 -6 24 -24 q-2 -16 -16 -12 q-10 4 -6 14" stroke="#f7a8bd" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <g class="baseshoes">
+        <ellipse cx="132" cy="458" rx="25" ry="14" fill="#e08aa0"/>
+        <ellipse cx="188" cy="458" rx="25" ry="14" fill="#e08aa0"/>
+      </g>
+      <ellipse cx="160" cy="360" rx="88" ry="98" fill="#f7a8bd"/>
+      <ellipse cx="160" cy="388" rx="52" ry="58" fill="#ffc9d8"/>
+      <ellipse cx="116" cy="438" rx="20" ry="26" fill="#f7a8bd"/>
+      <ellipse cx="204" cy="438" rx="20" ry="26" fill="#f7a8bd"/>
+      <!-- floppy ears -->
+      <path d="M108 104 q-14 -30 10 -34 q22 6 22 40 q-18 8 -32 -6 Z" fill="#f091a8"/>
+      <path d="M212 104 q14 -30 -10 -34 q-22 6 -22 40 q18 8 32 -6 Z" fill="#f091a8"/>
+      <circle cx="160" cy="146" r="64" fill="#f7a8bd"/>
+      <circle cx="134" cy="134" r="8" fill="EYEC"/>
+      <circle cx="186" cy="134" r="8" fill="EYEC"/>
+      <circle cx="137" cy="130" r="3" fill="#fff"/>
+      <circle cx="189" cy="130" r="3" fill="#fff"/>
+      <!-- snout -->
+      <ellipse cx="160" cy="176" rx="34" ry="24" fill="#f091a8"/>
+      <ellipse cx="148" cy="176" rx="7" ry="10" fill="#c96b82"/>
+      <ellipse cx="172" cy="176" rx="7" ry="10" fill="#c96b82"/>
+      <path d="M128 196 Q160 210 192 196" stroke="#c96b82" stroke-width="4" fill="none" stroke-linecap="round"/>
+    `
+  },
+
+  frog: {
+    name: "Hopscotch",
+    fur: "#66bb6a",
+    neckY: 252,
+    headY: 214,
+    anchors: {
+      hats:    { x: 160, y: 66,  scale: 1.05 },
+      hair:    { x: 160, y: 78,  scale: 1.05 },
+      makeup:  { x: 160, y: 166, scale: 1.0 },
+      jewelry: { x: 160, y: 238, scale: 1.0 },
+      clothes: { x: 160, y: 330, scale: 1.0 },
+      shoes:   { x: 160, y: 452, scale: 1.0 }
+    },
+    svg: `
+      <!-- back legs -->
+      <path d="M96 380 q-26 30 -6 60 q16 20 44 8" stroke="#66bb6a" stroke-width="26" fill="none" stroke-linecap="round"/>
+      <path d="M224 380 q26 30 6 60 q-16 20 -44 8" stroke="#66bb6a" stroke-width="26" fill="none" stroke-linecap="round"/>
+      <g class="baseshoes">
+        <path d="M104 448 q-16 8 -14 18 q14 6 22 -2 q10 8 20 0 q8 8 20 -2" stroke="#4c9a50" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <path d="M216 448 q16 8 14 18 q-14 6 -22 -2 q-10 8 -20 0 q-8 8 -20 -2" stroke="#4c9a50" stroke-width="10" fill="none" stroke-linecap="round"/>
+      </g>
+      <ellipse cx="160" cy="346" rx="86" ry="94" fill="#66bb6a"/>
+      <ellipse cx="160" cy="376" rx="54" ry="58" fill="#dcedc8"/>
+      <!-- spots -->
+      <circle cx="106" cy="308" r="11" fill="#4c9a50"/>
+      <circle cx="216" cy="330" r="9" fill="#4c9a50"/>
+      <!-- bulging eyes on top -->
+      <circle cx="118" cy="96" r="34" fill="#66bb6a"/>
+      <circle cx="202" cy="96" r="34" fill="#66bb6a"/>
+      <circle cx="118" cy="92" r="20" fill="#fff"/>
+      <circle cx="202" cy="92" r="20" fill="#fff"/>
+      <circle cx="120" cy="94" r="10" fill="EYEC"/>
+      <circle cx="204" cy="94" r="10" fill="EYEC"/>
+      <!-- wide head -->
+      <ellipse cx="160" cy="160" rx="76" ry="58" fill="#66bb6a"/>
+      <circle cx="132" cy="140" r="5" fill="#4c9a50"/>
+      <circle cx="188" cy="140" r="5" fill="#4c9a50"/>
+      <path d="M100 172 Q160 216 220 172" stroke="#3f7d43" stroke-width="6" fill="none" stroke-linecap="round"/>
     `
   }
 };

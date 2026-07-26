@@ -182,6 +182,61 @@ const ITEMS = [
     `
   },
 
+  {
+    id: "clownhat", category: "hats", name: "Clown Hair",
+    svg: `
+      <g fill="#e53935">
+        <circle cx="-46" cy="6" r="22"/><circle cx="46" cy="6" r="22"/>
+        <circle cx="-54" cy="26" r="16"/><circle cx="54" cy="26" r="16"/>
+        <circle cx="-30" cy="-8" r="16"/><circle cx="30" cy="-8" r="16"/>
+      </g>
+      <path d="M0 -56 L20 -14 L-20 -14 Z" fill="#3aa0ff"/>
+      <path d="M-22 -14 h44 v8 h-44 Z" fill="#ffe921"/>
+      <circle cx="0" cy="-60" r="8" fill="#3ecf5a"/>
+    `
+  },
+  {
+    id: "astrohelmet", category: "hats", name: "Space Helmet",
+    svg: `
+      <circle cx="0" cy="16" r="62" fill="#cfe8ff" opacity="0.55"/>
+      <circle cx="0" cy="16" r="62" fill="none" stroke="#eceff1" stroke-width="10"/>
+      <path d="M-62 16 a62 62 0 0 1 62 -62" stroke="#ffffff" stroke-width="8" fill="none" opacity="0.9"/>
+      <rect x="-70" y="52" width="140" height="18" rx="9" fill="#b0bec5"/>
+      <rect x="-16" y="-56" width="32" height="12" rx="6" fill="#90a4ae"/>
+      <circle cx="-52" cy="-14" r="8" fill="#ffd54f"/>
+    `
+  },
+  {
+    id: "pilotcap", category: "hats", name: "Pilot Cap",
+    svg: `
+      <path d="M-44 14 Q-46 -26 0 -28 Q46 -26 44 14 Z" fill="#2b3a55"/>
+      <rect x="-46" y="10" width="92" height="14" rx="7" fill="#1c2740"/>
+      <path d="M-30 22 Q0 26 30 22 Q52 34 40 42 Q0 32 -40 42 Q-52 34 -30 22 Z" fill="#1c2740"/>
+      <path d="M-14 -8 l6 10 12 -14 12 14 6 -10" stroke="#ffd54f" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cx="0" cy="-4" r="6" fill="#ffd54f"/>
+    `
+  },
+  {
+    id: "policecap", category: "hats", name: "Police Cap",
+    svg: `
+      <path d="M-44 12 Q-46 -24 0 -26 Q46 -24 44 12 Z" fill="#1f3b73"/>
+      <rect x="-46" y="8" width="92" height="12" rx="6" fill="#152a52"/>
+      <path d="M-32 20 Q0 24 32 20 Q54 32 42 40 Q0 30 -42 40 Q-54 32 -32 20 Z" fill="#152a52"/>
+      <rect x="-16" y="-18" width="32" height="24" rx="4" fill="#eceff1"/>
+      <path d="M0 -16 l4 8 9 1 -7 6 2 9 -8 -5 -8 5 2 -9 -7 -6 9 -1 Z" fill="#ffd54f"/>
+    `
+  },
+  {
+    id: "firehat", category: "hats", name: "Fire Helmet",
+    svg: `
+      <path d="M-52 20 Q-56 -14 0 -34 Q56 -14 52 20 Z" fill="#e53935"/>
+      <path d="M-60 20 Q0 6 60 20 Q64 32 52 34 Q0 22 -52 34 Q-64 32 -60 20 Z" fill="#c62828"/>
+      <path d="M0 -30 q10 0 12 12 l-24 0 q2 -12 12 -12 Z" fill="#ffd54f"/>
+      <rect x="-14" y="-14" width="28" height="20" rx="4" fill="#ffe921"/>
+      <text x="0" y="2" font-size="14" text-anchor="middle" fill="#c62828" font-family="sans-serif" font-weight="bold">1</text>
+    `
+  },
+
   /* ---------------- GLASSES (anchor: eyes) ---------------- */
   {
     id: "specs", category: "glasses", name: "Smart Specs",
@@ -777,6 +832,63 @@ const ITEMS = [
       <circle cx="-5" cy="-4" r="3.5" fill="#e53935"/>
       <circle cx="6" cy="0" r="3.5" fill="#e53935"/>
       <circle cx="-1" cy="10" r="3" fill="#e53935"/>
+    `
+  },
+  {
+    id: "dinostamp", category: "badges", name: "Tiny Dino",
+    svg: `
+      <path d="M-22 14 q-4 -18 10 -22 q2 -12 14 -12 q12 0 14 12 q10 4 8 14 l-6 8 h-8 l-2 -6 h-12 l-2 6 h-8 Z" fill="#66bb6a" stroke="#2e7d32" stroke-width="2"/>
+      <path d="M-12 -8 l-4 -8 6 2 -2 -8 6 6" fill="#43a047"/>
+      <circle cx="6" cy="-8" r="2.5" fill="#33261d"/>
+      <path d="M22 6 q10 -2 12 -12" stroke="#2e7d32" stroke-width="4" fill="none" stroke-linecap="round"/>
+    `
+  },
+  {
+    id: "cupcakestamp", category: "badges", name: "Cupcake",
+    svg: `
+      <path d="M-16 0 h32 l-5 22 h-22 Z" fill="#f2c94c" stroke="#e0a02e" stroke-width="2"/>
+      <path d="M-11 0 l-3 22 M0 0 v22 M11 0 l3 22" stroke="#e0a02e" stroke-width="2"/>
+      <path d="M-18 0 q-2 -14 10 -14 q0 -12 12 -10 q10 -4 14 8 q10 4 2 16 Z" fill="#ff8ab5"/>
+      <circle cx="4" cy="-20" r="4" fill="#e53935"/>
+    `
+  },
+  {
+    id: "peacestamp", category: "badges", name: "Peace Sign",
+    svg: `
+      <circle r="20" fill="none" stroke="#3ecf5a" stroke-width="5"/>
+      <path d="M0 -20 V20 M0 4 L-13 17 M0 4 L13 17" stroke="#3ecf5a" stroke-width="5" fill="none"/>
+    `
+  },
+  {
+    id: "catstamp", category: "badges", name: "Cat Face",
+    svg: `
+      <path d="M-18 -6 L-22 -24 L-6 -14 Z" fill="#ef9a3c"/>
+      <path d="M18 -6 L22 -24 L6 -14 Z" fill="#ef9a3c"/>
+      <circle r="18" fill="#ef9a3c"/>
+      <circle cx="-7" cy="-3" r="2.5" fill="#33261d"/>
+      <circle cx="7" cy="-3" r="2.5" fill="#33261d"/>
+      <path d="M-4 5 L0 9 L4 5" stroke="#33261d" stroke-width="2.5" fill="none"/>
+      <path d="M-10 4 h-12 M10 4 h12" stroke="#33261d" stroke-width="2" stroke-linecap="round"/>
+    `
+  },
+  {
+    id: "ufostamp", category: "badges", name: "Flying Saucer",
+    svg: `
+      <path d="M-4 -20 a12 10 0 0 1 8 0 q10 4 10 10 h-28 q0 -6 10 -10 Z" fill="#b3e5fc"/>
+      <ellipse cx="0" cy="-8" rx="24" ry="9" fill="#90a4ae" stroke="#607d8b" stroke-width="2"/>
+      <circle cx="-14" cy="-8" r="2.5" fill="#ffe921"/>
+      <circle cx="0" cy="-6" r="2.5" fill="#ff6fb5"/>
+      <circle cx="14" cy="-8" r="2.5" fill="#3ecf5a"/>
+      <path d="M-12 0 L-18 20 M12 0 L18 20" stroke="#ffe921" stroke-width="3" opacity="0.7"/>
+    `
+  },
+  {
+    id: "crownstamp", category: "badges", name: "Little Crown",
+    svg: `
+      <path d="M-20 12 L-24 -14 L-10 -4 L0 -18 L10 -4 L24 -14 L20 12 Z" fill="#ffd54f" stroke="#f9a825" stroke-width="2"/>
+      <circle cx="0" cy="4" r="3" fill="#e53935"/>
+      <circle cx="-11" cy="5" r="2.5" fill="#3aa0ff"/>
+      <circle cx="11" cy="5" r="2.5" fill="#3ecf5a"/>
     `
   },
   {
@@ -1468,6 +1580,62 @@ const ITEMS = [
       <rect x="18" y="4" width="22" height="7" rx="3" fill="#33261d"/>
       <rect x="-40" y="14" width="22" height="7" rx="3" fill="#e53935"/>
       <rect x="18" y="14" width="22" height="7" rx="3" fill="#e53935"/>
+    `
+  },
+  {
+    id: "butterflypaint", category: "makeup", name: "Butterfly Paint",
+    svg: `
+      <g transform="translate(-34 2)">
+        <path d="M0 0 q-16 -18 -26 -6 q-8 12 8 18 q-12 8 -2 16 q12 8 20 -12 Z" fill="#9b59ff"/>
+        <circle cx="-12" cy="2" r="3" fill="#ffe921"/>
+        <circle cx="-6" cy="16" r="2.5" fill="#ffe921"/>
+      </g>
+      <g transform="translate(34 2) scale(-1 1)">
+        <path d="M0 0 q-16 -18 -26 -6 q-8 12 8 18 q-12 8 -2 16 q12 8 20 -12 Z" fill="#ff6fb5"/>
+        <circle cx="-12" cy="2" r="3" fill="#ffe921"/>
+        <circle cx="-6" cy="16" r="2.5" fill="#ffe921"/>
+      </g>
+    `
+  },
+  {
+    id: "heromask", category: "makeup", name: "Superhero Mask",
+    svg: `
+      <path d="M-42 -12 Q0 -24 42 -12 Q44 10 30 14 Q14 16 6 2 Q0 -4 -6 2 Q-14 16 -30 14 Q-44 10 -42 -12 Z" fill="#1e88e5"/>
+      <ellipse cx="-22" cy="-2" rx="13" ry="9" fill="#ffffff" opacity="0.9"/>
+      <ellipse cx="22" cy="-2" rx="13" ry="9" fill="#ffffff" opacity="0.9"/>
+    `
+  },
+  {
+    id: "fangs", category: "makeup", name: "Vampire Fangs",
+    svg: `
+      <path d="M-20 16 Q0 26 20 16 Q0 34 -20 16 Z" fill="#6d2a2a"/>
+      <path d="M-11 20 l5 12 5 -12 Z" fill="#ffffff"/>
+      <path d="M2 20 l5 12 5 -12 Z" fill="#ffffff"/>
+    `
+  },
+  {
+    id: "bandaid", category: "makeup", name: "Brave Band-Aid",
+    svg: `
+      <g transform="rotate(-18)">
+        <rect x="-24" y="-6" width="48" height="16" rx="7" fill="#ffcc9e" stroke="#e0a97b" stroke-width="2"/>
+        <rect x="-8" y="-6" width="16" height="16" fill="#f2b98a"/>
+        <g fill="#e0a97b">
+          <circle cx="-4" cy="-2" r="1.6"/><circle cx="2" cy="-2" r="1.6"/>
+          <circle cx="-4" cy="5" r="1.6"/><circle cx="2" cy="5" r="1.6"/>
+        </g>
+      </g>
+    `
+  },
+  {
+    id: "unibrow", category: "makeup", name: "Mighty Unibrow",
+    svg: `
+      <path d="M-38 -16 Q-18 -28 0 -22 Q18 -28 38 -16 Q18 -20 0 -14 Q-18 -20 -38 -16 Z" fill="#33261d"/>
+    `
+  },
+  {
+    id: "beautymark", category: "makeup", name: "Beauty Mark",
+    svg: `
+      <circle cx="-22" cy="22" r="4" fill="#4a3728"/>
     `
   },
   {
