@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Xenia's Silly Dress-Up Studio</title>
+<link rel="stylesheet" href="css/style.css">
+
+<!-- installable home-screen app (iPad/iPhone/Android) -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#ff8a3d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dress-Up">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+</head>
+<body>
+
+<header id="toolbar">
+  <h1>🎩 Xenia's Silly Dress-Up Studio</h1>
+  <div class="toolbar-buttons">
+    <button id="surprise-btn" class="big-btn">🎲 Surprise Me!</button>
+    <button id="photo-btn" class="big-btn photo">📸 Photo!</button>
+    <button id="reset-btn" class="big-btn secondary">🧺 Reset</button>
+    <div id="photo-opts" title="Photo name color &amp; stars"></div>
+  </div>
+</header>
+
+<main id="game">
+
+  <!-- Character shelf -->
+  <aside id="shelf">
+    <h2>Who's dressing up?</h2>
+    <button id="add-photo-btn" title="Make a character from a photo">📷 Add Your Own</button>
+    <div id="character-list"></div>
+  </aside>
+
+  <!-- Stage -->
+  <section id="stage-wrap">
+    <div id="bubble" class="hidden"></div>
+    <div id="stage">
+      <svg id="char-svg" viewBox="0 0 320 520" aria-label="Your character"></svg>
+    </div>
+    <div id="name-tag" title="Click to rename">
+      <span id="name-text"></span>
+      <button id="rename-btn" aria-label="Rename character">✏️</button>
+    </div>
+    <div id="pickers">
+      <div id="skin-picker" class="picker-row hidden" title="Pick a skin tone"></div>
+      <div id="eye-picker" class="picker-row" title="Pick an eye color"></div>
+      <div id="face-picker" class="picker-row" title="Pick an eye shape"></div>
+      <div id="mouth-picker" class="picker-row" title="Pick a mouth shape"></div>
+      <div id="bg-picker" class="picker-row" title="Pick a background"></div>
+    </div>
+    <p id="hint">Drag clothes from the cabinet onto your character! Tap a worn item to take it off.</p>
+  </section>
+
+  <!-- Cabinet -->
+  <aside id="cabinet">
+    <h2>👗 The Cabinet</h2>
+    <nav id="tabs"></nav>
+    <div id="swatches" class="hidden"></div>
+    <div id="item-grid"></div>
+  </aside>
+
+</main>
+
+<!-- shared defs: rainbow gradient referenced by hair items anywhere on the page -->
+<svg id="shared-defs" width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="photoHead"><circle cx="160" cy="118" r="60"/></clipPath>
+    <linearGradient id="rainbowHair" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#ff5252"/>
+      <stop offset="20%" stop-color="#ffb142"/>
+      <stop offset="40%" stop-color="#ffe921"/>
+      <stop offset="60%" stop-color="#42d95e"/>
+      <stop offset="80%" stop-color="#3aa0ff"/>
+      <stop offset="100%" stop-color="#b26dff"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- photo studio: make a character from a picture (stays on this device) -->
+<div id="photo-modal" class="hidden">
+  <div class="modal-card">
+    <h2>📷 Make Your Own Character</h2>
+    <p class="modal-note">Your picture stays on this device — it is never uploaded anywhere.</p>
+    <div id="photo-stage">
+      <canvas id="photo-canvas" width="240" height="240"></canvas>
+      <div id="photo-empty">Pick a photo to start!</div>
+    </div>
+    <p class="modal-hint">Drag the picture to line up the face, and use the slider to zoom.</p>
+    <div class="modal-row">
+      <button id="photo-pick" class="big-btn">🖼️ Choose Photo</button>
+    </div>
+    <div class="modal-row">
+      🔍 <input type="range" id="photo-zoom" min="100" max="300" value="100">
+    </div>
+    <div class="modal-row">
+      <span class="modal-label">Photo</span>
+      <input type="range" id="photo-style" min="0" max="100" value="45">
+      <span class="modal-label">Drawing</span>
+    </div>
+    <div class="modal-row">
+      <input type="text" id="photo-name" maxlength="16" placeholder="Name them...">
+    </div>
+    <p id="photo-msg" class="modal-msg"></p>
+    <div class="modal-row">
+      <button id="photo-add" class="big-btn">✨ Add to Shelf</button>
+      <button id="photo-cancel" class="big-btn secondary">Cancel</button>
+    </div>
+  </div>
+</div>
+<input type="file" id="photo-file" accept="image/*" class="hidden">
+
+<!-- floating item that follows the pointer while dragging -->
+<div id="ghost" class="hidden">
+  <svg viewBox="-70 -70 140 140"></svg>
+</div>
+
+<script src="js/backgrounds.js"></script>
+<script src="js/characters.js"></script>
+<script src="js/wardrobe.js"></script>
+<script src="js/photo.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

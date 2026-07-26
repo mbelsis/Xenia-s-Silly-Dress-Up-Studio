@@ -1,0 +1,16 @@
+{
+  "name": "Xenia's Silly Dress-Up Studio",
+  "short_name": "Dress-Up",
+  "description": "Dress up people and animals in silly outfits.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fdf3e3",
+  "theme_color": "#ff8a3d",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
