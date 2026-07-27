@@ -12,6 +12,9 @@
 }
 
 html, body { height: 100%; }
+/* dvh tracks Safari's collapsing toolbar, so the panels aren't pushed off
+   the bottom of an iPad in a browser tab */
+@supports (height: 100dvh) { html, body { height: 100dvh; } }
 
 body {
   user-select: none;
@@ -26,7 +29,11 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  touch-action: none; /* we handle dragging ourselves */
+  /* NB: do NOT put `touch-action: none` here. It disables every touch gesture
+     for the whole page, including scrolling inside the shelf and the cabinet,
+     which makes the game unusable on a tablet. A mouse wheel ignores the rule,
+     so it looks fine on a desktop. Suppress panning only where a drag starts
+     (see #stage and .cab-item). */
 }
 
 /* ---------- toolbar ---------- */
@@ -124,6 +131,11 @@ aside, #stage-wrap {
   min-height: 0;
   overflow: hidden;
 }
+
+/* the stage panel holds the character plus every picker row; on a short
+   screen (a landscape iPad) that doesn't fit, so let it scroll instead of
+   squashing the character down to nothing */
+#stage-wrap { overflow-y: auto; }
 
 aside h2 {
   font-size: 0.95rem;
@@ -271,7 +283,12 @@ aside h2 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* NOT `center`: when a centered flex column overflows, the part that spills
+     off the TOP is clipped and can never be scrolled to — on a short screen
+     that ate the character's head. Scrollable overflow only ever grows
+     downwards. #stage has flex:1 and soaks up any spare room anyway, so
+     starting at the top looks identical when everything fits. */
+  justify-content: flex-start;
   position: relative;
 }
 
@@ -281,7 +298,11 @@ aside h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 0;
+  /* a floor, so the pickers below can never squeeze the character away —
+     the panel scrolls instead. vh keeps it sane on a small phone. */
+  min-height: min(360px, 52vh);
+  /* a drag that starts on the character shouldn't scroll the panel */
+  touch-action: none;
 }
 
 #char-svg {
@@ -664,6 +685,16 @@ aside h2 {
 }
 .cab-item:hover { transform: scale(1.06) rotate(-2deg); border-color: var(--accent); }
 .cab-item svg { width: 100%; height: 70px; pointer-events: none; }
+/* pan-y keeps the cabinet scrollable with an up/down swipe while leaving
+   sideways movement — the direction you drag an item onto the character —
+   to us. The callout/drag rules stop iOS grabbing the SVG for its own
+   drag-and-drop, which would cancel our pointer stream mid-drag. */
+.cab-item {
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+}
+.cab-item svg, .char-thumb svg { -webkit-user-drag: none; pointer-events: none; }
 .cab-item span { font-size: 0.72rem; display: block; pointer-events: none; }
 
 /* whole-uniform cards: taller preview (the outfit is stacked head to toe) */

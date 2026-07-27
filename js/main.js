@@ -1243,7 +1243,7 @@
   gridEl.addEventListener("pointerdown", (e) => {
     const cab = e.target.closest(".cab-item");
     if (!cab) return;
-    e.preventDefault();
+    // no preventDefault: it would block the cabinet from scrolling on touch
     dragStart = { x: e.clientX, y: e.clientY };
     dragUniformId = cab.dataset.uniformId || null;
     dragItemId = cab.dataset.itemId || null;
@@ -1256,15 +1256,22 @@
       ghostSvg.innerHTML = itemArt(dragItem);
     }
     moveGhost(e);
-    ghost.classList.remove("hidden");
-    stage.classList.add("drop-ready");
   });
 
   // track the whole document so the drop always completes (or cleanly
   // cancels), even if the pointer leaves the cabinet mid-drag
   document.addEventListener("pointermove", (e) => {
-    if (dragItemId || dragUniformId) moveGhost(e);
+    if (!dragItemId && !dragUniformId) return;
+    moveGhost(e);
+    // the ghost only appears once this is clearly a drag, so scrolling the
+    // cabinet with a swipe doesn't flash an item across the screen
+    if (ghost.classList.contains("hidden") && dragStart &&
+        Math.hypot(e.clientX - dragStart.x, e.clientY - dragStart.y) > 10) {
+      ghost.classList.remove("hidden");
+      stage.classList.add("drop-ready");
+    }
   });
+
 
   document.addEventListener("pointerup", (e) => {
     if (!dragItemId && !dragUniformId) return;
@@ -1272,13 +1279,14 @@
     const overStage =
       e.clientX >= r.left && e.clientX <= r.right &&
       e.clientY >= r.top && e.clientY <= r.bottom;
-    // a whole uniform is a big "wear this" button: a plain tap works too, so
-    // small hands don't have to drag six pieces of clothing across the screen
+    // Tapping an item puts it on, as well as dragging it over. Dragging is
+    // fiddly on a tablet — the cabinet has to stay scrollable, so a swipe
+    // can't also be a drag — and a tap is the obvious thing a kid tries.
     const tapped = dragStart &&
-      Math.abs(e.clientX - dragStart.x) < 8 && Math.abs(e.clientY - dragStart.y) < 8;
+      Math.abs(e.clientX - dragStart.x) < 10 && Math.abs(e.clientY - dragStart.y) < 10;
     if (dragUniformId) {
       if (overStage || tapped) equipUniform(dragUniformId);
-    } else if (overStage) {
+    } else if (overStage || tapped) {
       equip(dragItemId);
     }
     endDrag();
