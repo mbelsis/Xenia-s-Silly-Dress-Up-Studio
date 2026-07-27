@@ -179,6 +179,30 @@ grandma, a robot.
 
 ## 5. Wardrobe (initial items)
 
+- **Uniforms** (the first drawer): a whole outfit in one drop — hat, top,
+  bottoms, shoes and the right props together. Fifteen of them:
+  **Police Officer** (cap, shades, badge, walkie-talkie), **Astronaut**
+  (helmet, suit, rocket boots, flag), **Sneaky Thief** (beanie, bandit mask,
+  stripey top, loot sack), **Head Chef** (chef hat, moustache, jacket, checky
+  trousers, crocs, frying pan), **Circus Clown** (clown hair, red nose,
+  polka-dot suit, giant shoes, balloons), **Magician** (top hat with a rabbit
+  climbing out onto the brim, cape, bow tie, wand), **Firefighter** (helmet,
+  bunker coat with reflective stripes, axe), **Pirate Captain** (tricorn, eye
+  patch, gold-buttoned coat with a parrot on the shoulder, hoop earring,
+  cutlass), **Luchador** (star mask, singlet, tights, championship belt),
+  **Ninja** (hood, eye-slit face wrap, gi with a red sash, throwing star),
+  **Banana Suit** (peel hat, banana body, sneakers), **Detective**
+  (deerstalker, moustache, trench coat, magnifying glass), **Scuba Diver**
+  (snorkel mask, wetsuit, air tank, flippers), **Farmer** (straw hat, checked
+  shirt and dungarees, wellies, pitchfork), **Race Car Driver** (visor helmet,
+  sponsor-covered suit, trophy).
+
+  The joke is cross-species: a cow as a police officer, a dalmatian as the
+  firefighter, the parrot as a pirate captain (with a parrot on its shoulder),
+  a fish in scuba gear, a cow farmer wondering which one it is. Around 70
+  animal-specific quips cover these. Any single piece can still be taken off
+  by tapping it, so half a uniform is a look too.
+
 - **Hats**: Propeller Beanie, Wizard Hat, Pirate Hat, Rubber Duck, Banana Peel,
   Fish Bowl, Carrot Top, Honey Pot, Royal Crown, Party Hat, Chef Hat, Sombrero,
   Baseball Cap, Sport Visor, Bucket Hat, Floppy Sun Hat, Clown Hair, Space
@@ -201,7 +225,7 @@ grandma, a robot.
 - **Stamps** (chest logos drawn over the top): Gold Star, Big Heart,
   Lightning Bolt, Smiley, Soccer Ball, Electric Guitar, Rockin' Drum, Music
   Notes, ROCK! Stamp, Robot Buddy, Pizza Slice, Tiny Dino, Cupcake, Peace
-  Sign, Cat Face, Flying Saucer, Little Crown, Mini Rainbow
+  Sign, Cat Face, Flying Saucer, Little Crown, Mini Rainbow, Mission Patch
 - **Bottoms** (worn together with a top!): Beach Shorts, Basketball Shorts,
   Running Shorts, Soccer Shorts, Blue Jeans, Ripped Jeans, Jean Shorts, Smart
   Trousers, Tracksuit Pants, Pajama Pants, Fancy Pants, Grass Skirt, Denim

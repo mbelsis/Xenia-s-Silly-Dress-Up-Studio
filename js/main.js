@@ -296,6 +296,12 @@
   /* seasonal items live in their own drawer but land in a normal slot */
   const slotOf = (item) => item.slot || item.category;
 
+  /* Uniforms live in their own data file. activeUniform() runs on every render
+     (the giggle meter asks it), so if js/uniforms.js ever fails to load we
+     degrade to "no Uniforms drawer" rather than taking the whole game down. */
+  const UNIFORM_LIST = (() => { try { return UNIFORMS; } catch (e) { return []; } })();
+  const UNIFORM_JOKES = (() => { try { return UNIFORM_COMBOS; } catch (e) { return {}; } })();
+
   /* which special drawer is open right now, if any */
   function currentSeason() {
     const now = new Date();
@@ -335,7 +341,14 @@
     if (char.anchors[cat]) return char.anchors[cat];
     if (cat === "bottoms") {
       const c = char.anchors.clothes;
-      return { x: c.x, y: c.y + 85 * c.scale, scale: c.scale };
+      const waistY = c.y + 85 * c.scale;
+      // animals have short legs: at full height the trouser hem swallows the
+      // whole shoe, so squash bottoms vertically until the hem sits just over
+      // the shoe (never stretched — humans come out unchanged)
+      const shoeTop = char.anchors.shoes.y - 14 * char.anchors.shoes.scale * SLOT_SCALE.shoes;
+      const wanted = (shoeTop + 15 - waistY) / 58;
+      const squash = Math.min(1, wanted / (c.scale * SLOT_SCALE.bottoms));
+      return { x: c.x, y: waistY, scale: c.scale, scaleY: c.scale * squash };
     }
     if (cat === "beards") {
       const m = char.anchors.makeup;
@@ -458,14 +471,27 @@
       const id = state.worn[cat];
       if (!id) continue;
       const a = slotAnchor(char, cat);
-      const scale = a.scale * (SLOT_SCALE[cat] || 1);
+      const mult = SLOT_SCALE[cat] || 1;
+      const scale = a.scale * mult;
+      // scaleY lets a slot be squashed to fit (see bottoms in slotAnchor)
+      const scaleY = (a.scaleY === undefined ? a.scale : a.scaleY) * mult;
       out += `<g class="worn" data-cat="${cat}"
-                 transform="translate(${a.x} ${a.y}) scale(${scale})">
+                 transform="translate(${a.x} ${a.y}) scale(${scale} ${scaleY})">
                 ${itemArt(itemById(id))}
               </g>`;
     }
     charSvg.innerHTML = out + weatherSvg();
     updateGiggle();
+    syncUniformCards();
+  }
+
+  /* keep the "you're wearing this one" ring on the uniform cards in step with
+     the stage — taking a single piece off breaks the uniform */
+  function syncUniformCards() {
+    const active = activeUniform();
+    for (const el of gridEl.querySelectorAll(".cab-item.uniform")) {
+      el.classList.toggle("worn-now", !!active && el.dataset.uniformId === active.id);
+    }
   }
 
   function renderShelf() {
@@ -516,9 +542,11 @@
 
   function renderTabs() {
     tabsEl.innerHTML = "";
-    const tabs = SEASON
-      ? [...CATEGORIES, { id: "seasonal", label: SEASON.label }]
-      : CATEGORIES;
+    // Uniforms lead the cabinet: one drop dresses the whole character
+    const tabs = UNIFORM_LIST.length
+      ? [{ id: "uniforms", label: "🎖️ Uniforms" }, ...CATEGORIES]
+      : [...CATEGORIES];
+    if (SEASON) tabs.push({ id: "seasonal", label: SEASON.label });
     for (const cat of tabs) {
       const btn = document.createElement("button");
       btn.className = "tab" + (cat.id === state.tab ? " active" : "");
@@ -534,8 +562,22 @@
 
   function renderGrid() {
     gridEl.innerHTML = "";
+    if (state.tab === "uniforms") {
+      const active = activeUniform();
+      for (const uni of UNIFORM_LIST) {
+        const el = document.createElement("div");
+        el.className = "cab-item uniform" + (active === uni ? " worn-now" : "");
+        el.dataset.uniformId = uni.id;
+        el.innerHTML =
+          `<svg viewBox="${UNIFORM_PREVIEW}">${uniformArt(uni)}</svg>` +
+          `<span>${uni.emoji} ${uni.name}</span>`;
+        gridEl.appendChild(el);
+      }
+      renderSwatches();
+      return;
+    }
     const inDrawer = ITEMS.filter((i) =>
-      i.category === state.tab &&
+      i.category === state.tab && !i.hidden &&      // uniform-only pieces stay hidden
       (i.category !== "seasonal" || (SEASON && i.season === SEASON.id))
     );
     for (const item of inDrawer) {
@@ -547,6 +589,53 @@
       gridEl.appendChild(el);
     }
     renderSwatches();
+  }
+
+  /* ---------------- uniforms ---------------- */
+
+  const uniformById = (id) => UNIFORM_LIST.find((u) => u.id === id);
+
+  /* the uniform currently on the character, or null — derived from the worn
+     slots so it stays right even after a piece is taken off */
+  function activeUniform() {
+    return UNIFORM_LIST.find((u) =>
+      Object.entries(u.worn).every(([slot, id]) => state.worn[slot] === id)) || null;
+  }
+
+  /* thumbnail: the actual pieces laid out like an outfit on a bed, so the card
+     always matches what you get */
+  const UNIFORM_PREVIEW = "-76 -108 152 210";
+  const UNIFORM_LAYOUT = {
+    hats:    { y: -62, s: 0.52 },
+    clothes: { y: -2,  s: 0.55 },
+    bottoms: { y: 48,  s: 0.5 },
+    shoes:   { y: 84,  s: 0.5 }
+  };
+
+  function uniformArt(uni) {
+    let out = "";
+    for (const slot of ["hats", "clothes", "bottoms", "shoes"]) {
+      const id = uni.worn[slot];
+      if (!id) continue;
+      const L = UNIFORM_LAYOUT[slot];
+      out += `<g transform="translate(0 ${L.y}) scale(${L.s})">${itemArt(itemById(id))}</g>`;
+    }
+    return out;
+  }
+
+  /* dress the whole character at once: clear every slot the uniform doesn't
+     use (hair and beards survive — they're part of who the character is) */
+  function equipUniform(uniformId) {
+    const uni = uniformById(uniformId);
+    if (!uni) return;
+    for (const slot of Object.keys(state.worn)) {
+      if (slot === "hair" || slot === "beards") continue;
+      state.worn[slot] = uni.worn[slot] || null;
+    }
+    renderCharacter();
+    bounce();
+    playSound("fanfare");
+    say(UNIFORM_JOKES[`${uniformId}:${state.characterId}`] || uni.quips);
   }
 
   const swatchesEl = document.getElementById("swatches");
@@ -763,6 +852,8 @@
     if (state.itemColors.beards === "rainbow" && state.worn.beards) score += 5;
     if (state.worn.beards) score += 2;                       // a beard is funny on anyone
     if (state.swapHead) score += 8;
+    // an animal in a full uniform is the funniest thing in the game
+    if (activeUniform() && CHARACTERS[state.characterId].fur) score += 10;
     const skin = state.skinTones[state.characterId];
     if (skin === "#7ed957" || skin === "#8ab6f9") score += 5;
     const fur = state.furColors[state.characterId];
@@ -1146,15 +1237,24 @@
   /* ---------------- drag & drop (pointer events: mouse + touch) ---------------- */
 
   let dragItemId = null;
+  let dragUniformId = null;
+  let dragStart = null;
 
   gridEl.addEventListener("pointerdown", (e) => {
     const cab = e.target.closest(".cab-item");
     if (!cab) return;
     e.preventDefault();
-    dragItemId = cab.dataset.itemId;
-    const dragItem = itemById(dragItemId);
-    ghostSvg.setAttribute("viewBox", dragItem.preview || "-70 -70 140 140");
-    ghostSvg.innerHTML = itemArt(dragItem);
+    dragStart = { x: e.clientX, y: e.clientY };
+    dragUniformId = cab.dataset.uniformId || null;
+    dragItemId = cab.dataset.itemId || null;
+    if (dragUniformId) {
+      ghostSvg.setAttribute("viewBox", UNIFORM_PREVIEW);
+      ghostSvg.innerHTML = uniformArt(uniformById(dragUniformId));
+    } else {
+      const dragItem = itemById(dragItemId);
+      ghostSvg.setAttribute("viewBox", dragItem.preview || "-70 -70 140 140");
+      ghostSvg.innerHTML = itemArt(dragItem);
+    }
     moveGhost(e);
     ghost.classList.remove("hidden");
     stage.classList.add("drop-ready");
@@ -1163,16 +1263,24 @@
   // track the whole document so the drop always completes (or cleanly
   // cancels), even if the pointer leaves the cabinet mid-drag
   document.addEventListener("pointermove", (e) => {
-    if (dragItemId) moveGhost(e);
+    if (dragItemId || dragUniformId) moveGhost(e);
   });
 
   document.addEventListener("pointerup", (e) => {
-    if (!dragItemId) return;
+    if (!dragItemId && !dragUniformId) return;
     const r = stage.getBoundingClientRect();
     const overStage =
       e.clientX >= r.left && e.clientX <= r.right &&
       e.clientY >= r.top && e.clientY <= r.bottom;
-    if (overStage) equip(dragItemId);
+    // a whole uniform is a big "wear this" button: a plain tap works too, so
+    // small hands don't have to drag six pieces of clothing across the screen
+    const tapped = dragStart &&
+      Math.abs(e.clientX - dragStart.x) < 8 && Math.abs(e.clientY - dragStart.y) < 8;
+    if (dragUniformId) {
+      if (overStage || tapped) equipUniform(dragUniformId);
+    } else if (overStage) {
+      equip(dragItemId);
+    }
     endDrag();
   });
 
@@ -1185,6 +1293,8 @@
 
   function endDrag() {
     dragItemId = null;
+    dragUniformId = null;
+    dragStart = null;
     ghost.classList.add("hidden");
     stage.classList.remove("drop-ready");
   }
@@ -1192,8 +1302,13 @@
   /* ---------------- toolbar ---------------- */
 
   document.getElementById("surprise-btn").addEventListener("click", () => {
+    // now and then the surprise is a whole uniform instead of a jumble
+    if (Math.random() < 0.25) {
+      equipUniform(pick(UNIFORM_LIST).id);
+      return;
+    }
     for (const cat of CATEGORIES) {
-      const options = ITEMS.filter((i) => i.category === cat.id);
+      const options = ITEMS.filter((i) => i.category === cat.id && !i.hidden);
       // 80% chance per slot: usually a full outfit, sometimes bare feet
       state.worn[cat.id] = Math.random() < 0.8 ? pick(options).id : null;
     }

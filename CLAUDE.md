@@ -27,9 +27,10 @@ Syntax check after editing JS: `node --check js/<file>.js`
 
 Plain HTML/CSS/vanilla JS, loaded as classic scripts (no modules) in this
 order: `js/backgrounds.js` → `js/characters.js` → `js/wardrobe.js` →
-`js/photo.js` → `js/main.js`. The data files define the globals `BACKGROUNDS`,
-`CHARACTERS`, `ITEMS`, and `CATEGORIES` that `main.js` consumes; `photo.js`
-defines the `PhotoStudio` module.
+`js/uniforms.js` → `js/photo.js` → `js/music.js` → `js/main.js`. The data files
+define the globals `BACKGROUNDS`, `CHARACTERS`, `ITEMS`, `CATEGORIES`,
+`UNIFORMS`, and `UNIFORM_COMBOS` that `main.js` consumes; `photo.js` defines
+the `PhotoStudio` module.
 
 The core idea that makes one wardrobe fit every character:
 
@@ -57,7 +58,25 @@ The core idea that makes one wardrobe fit every character:
   `slotAnchor()` in `main.js` derives them from the clothes/makeup anchors, so
   new characters only need the original six anchors. Bottoms draw under tops
   so a tuxedo top and shorts can be worn together; held items draw last (in
-  front of everything) at the character's right hand.
+  front of everything) at the character's right hand. `slotAnchor()` may also
+  return a `scaleY` (rendered as `scale(sx sy)`): bottoms use it to squash
+  vertically on animals, whose legs are too short for a full-height trouser —
+  without it the hem swallows the shoes entirely. It never stretches, so
+  humans render unchanged.
+- **Uniforms** (`js/uniforms.js`): a complete outfit — hat, top, bottoms,
+  shoes and props — applied in one drop. A uniform is only a slot → item id
+  map, so everything downstream (draw order, tapping a piece to remove it,
+  photos, saved looks) works unchanged; applying one clears every other slot
+  except hair and beards. Pieces that exist only inside a uniform are ordinary
+  items marked `hidden: true` and pushed onto `ITEMS` — `renderGrid()` and
+  Surprise Me filter them out, so they never clutter the drawers. The cabinet
+  card composes the real part art into a head-to-toe stack (`uniformArt()`),
+  so a card can never disagree with what you get. `activeUniform()` derives
+  which uniform is on from the worn slots rather than storing it, so removing
+  one piece correctly drops the "wearing it" ring. Uniform cards accept a tap
+  as well as a drag — six garments is a lot to drag. `UNIFORM_COMBOS` in
+  uniforms.js is keyed `"uniformId:characterId"` for animal-specific jokes
+  (the cow police officer, the pig chef, the bunny magician).
 - **Fur colors**: animals declare `fur: "<default main color>"` — no token
   needed; `charArt()` string-replaces every occurrence of that literal with
   the selected color (`state.furColors`). Accent colors are untouched. The

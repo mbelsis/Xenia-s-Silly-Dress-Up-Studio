@@ -666,6 +666,11 @@ aside h2 {
 .cab-item svg { width: 100%; height: 70px; pointer-events: none; }
 .cab-item span { font-size: 0.72rem; display: block; pointer-events: none; }
 
+/* whole-uniform cards: taller preview (the outfit is stacked head to toe) */
+.cab-item.uniform { background: #fff3e2; border-color: #e6cfae; }
+.cab-item.uniform svg { height: 108px; }
+.cab-item.uniform.worn-now { border-color: var(--accent); background: #ffeccd; }
+
 /* ---------- drag ghost ---------- */
 #ghost {
   position: fixed;
